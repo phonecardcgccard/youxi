@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推箱子 - Sokoban</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #88c0d0, #4c566a);
+            color: #2e3440;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            color: #eceff4;
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(8, 64px);
+            grid-template-rows: repeat(8, 64px);
+            gap: 2px;
+            background: #2e3440;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tile {
+            width: 64px;
+            height: 64px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .floor {
+            background-color: #d8dee9;
+        }
+
+        .wall {
+            background-color: #4c566a;
+        }
+
+        .box {
+            background-color: #ebcb8b;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .player {
+            background-color: #a3be8c;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .target {
+            background-color: #bf616a;
+        }
+
+        .completed {
+            background-color: #a3be8c;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .controls p {
+            font-size: 1rem;
+            color: #d8dee9;
+        }
+    </style>
+</head>
+<body>
+    <h1>推箱子 - Sokoban</h1>
+    <div class="game-container" id="gameContainer">
+        <!-- 游戏网格将由JS动态生成 -->
+    </div>
+    <div class="controls">
+        <p>使用键盘方向键移动玩家，将所有箱子推到目标点。</p>
+    </div>
+
+    <script>
+        const LEVEL = [
+            ['wall', 'wall', 'wall', 'wall', 'wall', 'wall', 'wall', 'wall'],
+            ['wall', 'floor', 'floor', 'floor', 'floor', 'floor', 'floor', 'wall'],
+            ['wall', 'floor', 'box', 'floor', 'target', 'floor', 'floor', 'wall'],
+            ['wall', 'floor', 'floor', 'floor', 'floor', 'floor', 'floor', 'wall'],
+            ['wall', 'floor', 'floor', 'player', 'floor', 'floor', 'floor', 'wall'],
+            ['wall', 'floor', 'floor', 'floor', 'floor', 'floor', 'floor', 'wall'],
+            ['wall', 'wall', 'wall', 'wall', 'wall', 'wall', 'wall', 'wall']
+        ];
+
+        const gameContainer = document.getElementById('gameContainer');
+        let playerPosition = { x: 4, y: 3 }; // 初始玩家位置
+
+        function renderLevel() {
+            gameContainer.innerHTML = ''; // 清空现有网格
+            for (let x = 0; x < LEVEL.length; x++) {
+                for (let y = 0; y < LEVEL[x].length; y++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile', LEVEL[x][y]);
+                    gameContainer.appendChild(tile);
+                }
+            }
+        }
+
+        function movePlayer(dx, dy) {
+            const newX = playerPosition.x + dx;
+            const newY = playerPosition.y + dy;
+            const nextTile = LEVEL[newX][newY];
+            const beyondTile = LEVEL[newX + dx]?.[newY + dy];
+
+            if (nextTile === 'wall') return; // 无法移动到墙上
+
+            // 如果是箱子
+            if (nextTile === 'box') {
+                if (beyondTile === 'floor' || beyondTile === 'target') {
+                    LEVEL[newX + dx][newY + dy] = 'box'; // 移动箱子
+                    LEVEL[newX][newY] = 'floor'; // 清空当前位置
+                } else {
+                    return; // 无法推动箱子
+                }
+            }
+
+            // 如果是地板或目标点，移动玩家
+            if (nextTile === 'floor' || nextTile === 'target') {
+                LEVEL[playerPosition.x][playerPosition.y] = 'floor'; // 清空当前玩家位置
+                LEVEL[newX][newY] = 'player'; // 移动玩家到新位置
+                playerPosition = { x: newX, y: newY };
+            }
+
+            checkCompletion();
+            renderLevel();
+        }
+
+        function checkCompletion() {
+            let allBoxesOnTargets = true;
+
+            for (let x = 0; x < LEVEL.length; x++) {
+                for (let y = 0; y < LEVEL[x].length; y++) {
+                    if (LEVEL[x][y] === 'box' && !LEVEL[x][y].includes('target')) {
+                        allBoxesOnTargets = false;
+                    }
+                    if (LEVEL[x][y] === 'target' && LEVEL[x][y] === 'box') {
+                        LEVEL[x][y] = 'completed';
+                    }
+                }
+            }
+
+            if (allBoxesOnTargets) {
+                setTimeout(() => alert('恭喜！你完成了本关卡！'), 100);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    movePlayer(-1, 0);
+                    break;
+                case 'ArrowDown':
+                    movePlayer(1, 0);
+                    break;
+                case 'ArrowLeft':
+                    movePlayer(0, -1);
+                    break;
+                case 'ArrowRight':
+                    movePlayer(0, 1);
+                    break;
+            }
+        });
+
+        renderLevel(); // 初始化游戏
+    </script>
+</body>
+</html>
