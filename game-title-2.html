@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪食蛇 - Snake Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5rem;
+            color: #ff9800;
+        }
+
+        .game-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            background: #1e1e2f;
+            border: 5px solid #ff9800;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+            box-sizing: border-box;
+        }
+
+        .snake {
+            background: #4caf50;
+        }
+
+        .food {
+            background: #e91e63;
+        }
+
+        .obstacle {
+            background: #9c27b0;
+        }
+
+        .scoreboard {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>贪食蛇 - Snake Game</h1>
+    <div class="game-container" id="gameContainer"></div>
+    <div class="scoreboard" id="scoreBoard">分数: 0</div>
+
+    <script>
+        const gameContainer = document.getElementById('gameContainer');
+        const scoreBoard = document.getElementById('scoreBoard');
+
+        const rows = 20;
+        const cols = 20;
+        const speed = 200; // 初始速度（毫秒）
+        let snake = [{ x: 10, y: 10 }];
+        let direction = { x: 0, y: 0 };
+        let food = generateRandomPosition();
+        let obstacles = generateObstacles();
+        let score = 0;
+        let gameInterval;
+
+        // 初始化游戏网格
+        function createGrid() {
+            gameContainer.innerHTML = '';
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.x = i;
+                    cell.dataset.y = j;
+                    gameContainer.appendChild(cell);
+                }
+            }
+        }
+
+        // 生成随机位置
+        function generateRandomPosition() {
+            let position;
+            do {
+                position = {
+                    x: Math.floor(Math.random() * rows),
+                    y: Math.floor(Math.random() * cols),
+                };
+            } while (isOccupied(position));
+            return position;
+        }
+
+        // 检查位置是否被占用
+        function isOccupied(position) {
+            return (
+                snake.some(segment => segment.x === position.x && segment.y === position.y) ||
+                obstacles.some(obstacle => obstacle.x === position.x && obstacle.y === position.y)
+            );
+        }
+
+        // 生成障碍物
+        function generateObstacles() {
+            const obstacleCount = 10; // 障碍物数量
+            const obstacles = [];
+            for (let i = 0; i < obstacleCount; i++) {
+                obstacles.push(generateRandomPosition());
+            }
+            return obstacles;
+        }
+
+        // 渲染游戏
+        function render() {
+            // 清空旧的渲染
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('snake', 'food', 'obstacle');
+            });
+
+            // 渲染蛇
+            snake.forEach(segment => {
+                const cell = document.querySelector(`.cell[data-x='${segment.x}'][data-y='${segment.y}']`);
+                if (cell) cell.classList.add('snake');
+            });
+
+            // 渲染食物
+            const foodCell = document.querySelector(`.cell[data-x='${food.x}'][data-y='${food.y}']`);
+            if (foodCell) foodCell.classList.add('food');
+
+            // 渲染障碍物
+            obstacles.forEach(obstacle => {
+                const obstacleCell = document.querySelector(`.cell[data-x='${obstacle.x}'][data-y='${obstacle.y}']`);
+                if (obstacleCell) obstacleCell.classList.add('obstacle');
+            });
+
+            // 更新分数
+            scoreBoard.textContent = `分数: ${score}`;
+        }
+
+        // 更新蛇的位置
+        function updateSnake() {
+            const head = {
+                x: snake[0].x + direction.x,
+                y: snake[0].y + direction.y,
+            };
+
+            // 检查是否撞墙或撞自己
+            if (
+                head.x < 0 ||
+                head.x >= rows ||
+                head.y < 0 ||
+                head.y >= cols ||
+                snake.some(segment => segment.x === head.x && segment.y === head.y) ||
+                obstacles.some(obstacle => obstacle.x === head.x && obstacle.y === head.y)
+            ) {
+                clearInterval(gameInterval);
+                alert(`游戏结束！你的分数是: ${score}`);
+                resetGame();
+                return;
+            }
+
+            // 吃到食物
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                food = generateRandomPosition();
+                if (score % 5 === 0) {
+                    obstacles.push(generateRandomPosition()); // 每5分增加一个障碍物
+                }
+            } else {
+                snake.pop(); // 如果没有吃到食物，移除尾部
+            }
+
+            snake.unshift(head); // 添加新头部
+        }
+
+        // 重置游戏
+        function resetGame() {
+            snake = [{ x: 10, y: 10 }];
+            direction = { x: 0, y: 0 };
+            food = generateRandomPosition();
+            obstacles = generateObstacles();
+            score = 0;
+            render();
+        }
+
+        // 游戏主循环
+        function gameLoop() {
+            updateSnake();
+            render();
+        }
+
+        // 键盘控制方向
+        window.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (direction.y === 0) direction = { x: -1, y: 0 };
+                    break;
+                case 'ArrowDown':
+                    if (direction.y === 0) direction = { x: 1, y: 0 };
+                    break;
+                case 'ArrowLeft':
+                    if (direction.x === 0) direction = { x: 0, y: -1 };
+                    break;
+                case 'ArrowRight':
+                    if (direction.x === 0) direction = { x: 0, y: 1 };
+                    break;
+            }
+        });
+
+        // 初始化游戏
+        function init() {
+            createGrid();
+            render();
+            gameInterval = setInterval(gameLoop, speed);
+        }
+
+        init();
+    </script>
+</body>
+</html>
