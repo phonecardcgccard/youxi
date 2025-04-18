@@ -74,8 +74,8 @@
         const speed = 200; // 初始速度（毫秒）
         let snake = [{ x: 10, y: 10 }];
         let direction = { x: 0, y: 0 };
-        let food = generateRandomPosition();
-        let obstacles = generateObstacles();
+        let obstacles = generateObstacles(); // 确保障碍物首先初始化
+        let food = generateRandomPosition(); // 然后生成食物
         let score = 0;
         let gameInterval;
 
