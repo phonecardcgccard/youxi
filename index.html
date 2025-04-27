@@ -6,7 +6,7 @@
     <title>Memory Master - Fun Brain Training Games</title>
     <meta name="description" content="Improve your memory with our fun brain training games. Challenge yourself with number, letter, and Chinese character memory games.">
     <meta name="keywords" content="memory game, brain training, number memory, letter memory, Chinese character memory, cognitive exercise">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/css/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -184,7 +184,7 @@
                 <!-- Chinese Character Memory Game -->
                 <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
                     <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">汉 字 记</span>
+                        <span class="text-white text-6xl font-bold">şş ×Ö ĽÇ</span>
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-3 text-gray-800">Chinese Character Memory</h3>
@@ -465,7 +465,7 @@
                 title: "Chinese Character Memory Challenge",
                 instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
                 generateSequence: function(level) {
-                    const characters = ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字'];
+                    const characters = ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö'];
                     const sequence = [];
                     for (let i = 0; i < level + 1; i++) { // Slightly shorter sequences for Chinese
                         const randomIndex = Math.floor(Math.random() * characters.length);
@@ -476,7 +476,7 @@
                 displayItem: function(item) {
                     return item;
                 },
-                inputOptions: ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字']
+                inputOptions: ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö']
             }
         };
 
@@ -568,28 +568,45 @@
             document.getElementById('user-input-area').classList.remove('hidden');
         }
 
-        // Update the display of user input
+        // 修复BUG后的updateInputDisplay
         function updateInputDisplay() {
             const inputTiles = document.getElementById('input-tiles');
             const config = gameConfigs[currentGame];
-            
-            // Clear existing input display
+
+            // 清空输入区
             inputTiles.innerHTML = '';
-            
-            // Show user's current input
+
+            // 1. 显示用户已输入的内容
             userInput.forEach(item => {
                 const span = document.createElement('span');
                 span.textContent = config.displayItem(item);
                 span.classList.add('bg-blue-100', 'border', 'border-blue-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'flex', 'items-center', 'justify-center');
                 inputTiles.appendChild(span);
             });
-            
-            // Add remaining input buttons
+
+            // 2. 显示剩余空格
             const remainingSlots = currentSequence.length - userInput.length;
             for (let i = 0; i < remainingSlots; i++) {
                 const div = document.createElement('div');
                 div.classList.add('border-2', 'border-dashed', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'flex', 'items-center', 'justify-center');
                 inputTiles.appendChild(div);
+            }
+
+            // 3. 只在还没输入满时，显示可点击按钮
+            if (userInput.length < currentSequence.length) {
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('col-span-full', 'flex', 'flex-wrap', 'justify-center', 'mt-4', 'gap-2');
+                config.inputOptions.forEach(item => {
+                    const button = document.createElement('button');
+                    button.textContent = config.displayItem(item);
+                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'px-4', 'py-2', 'text-lg', 'font-medium', 'transition');
+                    button.addEventListener('click', () => {
+                        userInput.push(item);
+                        updateInputDisplay();
+                    });
+                    optionsDiv.appendChild(button);
+                });
+                inputTiles.appendChild(optionsDiv);
             }
         }
 
@@ -655,7 +672,5 @@
     </script>
 </body>
 </html>
-
-
 
 
