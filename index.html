@@ -1,214 +1,379 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>记忆力小游戏</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-    </style>
+  <!-- Basic Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Memory Master – Fun Brain Training Games</title>
+  <meta
+    name="description"
+    content="Train your memory, focus, and cognitive skills with Number, Letter, and Chinese Character memory games."
+  />
+  <meta
+    name="keywords"
+    content="memory game, brain training, number memory, letter memory, Chinese character memory"
+  />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Memory Master – Fun Brain Training Games" />
+  <meta
+    property="og:description"
+    content="Train your memory, focus, and cognitive skills with our fun and challenging games."
+  />
+  <meta property="og:image" content="https://yourdomain.com/og-image.png" />
+  <meta property="og:url" content="https://yourdomain.com" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" />
+
+  <!-- Tailwind & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha384-..."
+    crossorigin="anonymous"
+  />
+
+  <!-- Custom Styles -->
+  <style>
+    @layer utilities {
+      .pulse-animation {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    }
+  </style>
 </head>
-<body>
-    <section class="py-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="games">
-                <!-- Letter Memory Game -->
-                <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <div class="h-48 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">A B C</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">字母记忆</h3>
-                        <p class="text-gray-600 mb-4">挑战你的记忆力，记住英文字母的顺序，非常适合语言学习者！</p>
-                        <button onclick="startGame('letter')" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
-                            开始游戏 <i class="fas fa-play ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- Chinese Character Memory Game -->
-                <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">水 火 山</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">汉字记忆</h3>
-                        <p class="text-gray-600 mb-4">用汉字挑战你的视觉记忆，非常适合中文学习者和记忆爱好者。</p>
-                        <button onclick="startGame('chinese')" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
-                            开始游戏 <i class="fas fa-play ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+<body class="bg-gradient-to-br from-blue-50 to-white text-gray-800 leading-relaxed">
+
+  <!-- Header / Navigation -->
+  <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between">
+      <a href="#home" class="flex items-center space-x-2">
+        <i class="fas fa-brain text-3xl"></i>
+        <h1 class="text-2xl font-bold">Memory Master</h1>
+      </a>
+      <nav class="hidden md:flex space-x-6" aria-label="Main navigation">
+        <a href="#home" class="hover:text-blue-200">Home</a>
+        <a href="#games" class="hover:text-blue-200">Games</a>
+        <a href="#about" class="hover:text-blue-200">About</a>
+        <a href="#benefits" class="hover:text-blue-200">Benefits</a>
+      </nav>
+      <button
+        aria-label="Toggle menu"
+        data-mobile-menu-button
+        class="md:hidden text-2xl focus:outline-none"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <nav
+      id="mobile-menu"
+      class="md:hidden hidden bg-blue-700"
+      aria-label="Mobile navigation"
+      data-mobile-menu
+    >
+      <div class="px-4 py-4 flex flex-col space-y-3">
+        <a href="#home" class="hover:text-blue-200">Home</a>
+        <a href="#games" class="hover:text-blue-200">Games</a>
+        <a href="#about" class="hover:text-blue-200">About</a>
+        <a href="#benefits" class="hover:text-blue-200">Benefits</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero / Banner -->
+    <section id="home" class="py-16 md:py-24">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h2 class="text-4xl md:text-5xl font-bold mb-4">
+            Train Your Brain <span class="text-blue-600">Everyday</span>
+          </h2>
+          <p class="text-lg text-gray-600 mb-6">
+            Improve your memory, focus, and cognitive skills with our fun and
+            challenging memory games. Perfect for all ages!
+          </p>
+          <div class="flex space-x-4">
+            <a
+              href="#games"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow-lg"
+            >
+              Play Now <i class="fas fa-gamepad ml-2"></i>
+            </a>
+            <a
+              href="#benefits"
+              class="bg-white hover:bg-gray-100 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow"
+            >
+              Learn Benefits <i class="fas fa-info-circle ml-2"></i>
+            </a>
+          </div>
         </div>
+        <div class="md:w-1/2 flex justify-center">
+          <div class="relative w-64 h-64 md:w-80 md:h-80">
+            <div class="absolute inset-0 rounded-full bg-blue-100 opacity-30 animate-pulse"></div>
+            <div class="absolute inset-4 rounded-full bg-blue-200 opacity-30 animate-pulse"></div>
+            <div class="absolute inset-8 rounded-full bg-blue-300 opacity-30 animate-pulse"></div>
+            <img
+              src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800"
+              alt="Abstract representation of brain training"
+              class="relative w-full h-full object-cover rounded-full border-8 border-white shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Game Area (Hidden by default) -->
-    <section id="game-area" class="py-16 bg-gray-50 hidden">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center mb-8">
-                <h2 id="game-title" class="text-2xl md:text-3xl font-bold text-gray-800"></h2>
-                <div class="flex items-center space-x-4">
-                    <span id="level-display" class="bg-gray-200 px-4 py-2 rounded-lg font-medium">关卡: 1</span>
-                    <span id="score-display" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">得分: 0</span>
-                </div>
+    <!-- Games Section -->
+    <section id="games" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Memory Challenge Games</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Choose from our selection of memory games designed to test and improve
+          different aspects of your cognitive abilities.
+        </p>
+      </div>
+      <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card Helper -->
+        <template id="game-card-template">
+          <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+            <div class="h-48 flex items-center justify-center text-white text-6xl font-bold"></div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-3 text-gray-800"></h3>
+              <p class="text-gray-600 mb-4"></p>
+              <button
+                class="w-full text-white py-2 rounded-lg font-medium transition flex items-center justify-center"
+              >
+                Play Game <i class="fas fa-play ml-2"></i>
+              </button>
             </div>
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                <div id="game-instructions" class="mb-6 p-4 bg-blue-50 rounded-lg"></div>
-                <div id="game-sequence" class="text-center text-4xl font-bold mb-6"></div>
-                <div id="game-input" class="flex flex-wrap gap-2 justify-center mb-6"></div>
-                <button id="next-round" class="hidden bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition">下一关</button>
-                <button id="back-to-menu" class="hidden bg-gray-400 hover:bg-gray-500 text-white py-2 px-6 rounded-lg font-medium transition mt-4">返回菜单</button>
-            </div>
-        </div>
+          </div>
+        </template>
+      </div>
     </section>
 
-    <script>
-        // 当前游戏状态
-        let currentGame = null;
-        let currentLevel = 1;
-        let currentScore = 0;
-        let currentSequence = [];
-        let userInput = [];
+    <!-- Placeholder for dynamic game area -->
+    <section id="game-area" class="py-16 bg-gray-50 hidden" aria-live="polite"></section>
 
-        // 游戏配置
-        const gameConfigs = {
-            letter: {
-                title: "字母记忆挑战",
-                instructions: "请记住显示的英文字母顺序，然后按顺序点击输入。每一关字母数量会增加。",
-                generateSequence: function(level) {
-                    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                    const sequence = [];
-                    for (let i = 0; i < level + 2; i++) {
-                        sequence.push(letters[Math.floor(Math.random() * letters.length)]);
-                    }
-                    return sequence;
-                },
-                displayItem: function(item) {
-                    return item;
-                },
-                inputOptions: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-            },
-            chinese: {
-                title: "汉字记忆挑战",
-                instructions: "请记住显示的汉字顺序，然后按顺序点击输入。每一关汉字数量会增加。",
-                generateSequence: function(level) {
-                    const characters = ['水', '火', '山', '木', '田', '日', '月', '金', '土', '风', '雨', '云', '石', '竹', '花', '草', '鱼', '鸟', '马', '牛'];
-                    const sequence = [];
-                    for (let i = 0; i < level + 1; i++) {
-                        const randomIndex = Math.floor(Math.random() * characters.length);
-                        sequence.push(characters[randomIndex]);
-                    }
-                    return sequence;
-                },
-                displayItem: function(item) {
-                    return item;
-                },
-                inputOptions: ['水', '火', '山', '木', '田', '日', '月', '金', '土', '风', '雨', '云', '石', '竹', '花', '草', '鱼', '鸟', '马', '牛']
-            }
-        };
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-16 bg-gradient-to-b from-white to-blue-50">
+      <div class="max-w-6xl mx-auto px-4 text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Benefits of Memory Training</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Regular memory exercises can provide numerous cognitive and everyday
+          life benefits.
+        </p>
+      </div>
+      <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+            <i class="fas fa-brain text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">Enhanced Cognitive Function</h3>
+          <p class="text-gray-600">
+            Stimulate neural pathways to improve processing speed and mental flexibility.
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600">
+            <i class="fas fa-book-reader text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">Better Learning Ability</h3>
+          <p class="text-gray-600">
+            Efficiently learn and retain new information in academic and professional settings.
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600">
+            <i class="fas fa-heartbeat text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">Long-term Brain Health</h3>
+          <p class="text-gray-600">
+            Regular mental exercise helps delay age-related cognitive decline.
+          </p>
+        </div>
+      </div>
+    </section>
 
-        // 开始游戏
-        function startGame(gameType) {
-            currentGame = gameType;
-            currentLevel = 1;
-            currentScore = 0;
-            document.getElementById('games').classList.add('hidden');
-            document.getElementById('game-area').classList.remove('hidden');
-            document.getElementById('game-title').textContent = gameConfigs[gameType].title;
-            document.getElementById('level-display').textContent = `关卡: ${currentLevel}`;
-            document.getElementById('score-display').textContent = `得分: ${currentScore}`;
-            document.getElementById('game-instructions').textContent = gameConfigs[gameType].instructions;
-            document.getElementById('back-to-menu').classList.add('hidden');
-            startRound();
-        }
+    <!-- About Section -->
+    <section id="about" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">About Memory Master</h2>
+          <p class="text-gray-600 mb-4">
+            Memory Master offers scientifically-designed games focused on working
+            memory, pattern recognition, and cognitive flexibility.
+          </p>
+          <p class="text-gray-600 mb-6">
+            Developed from cognitive psychology research to provide effective
+            mental exercise for students, professionals, and seniors alike.
+          </p>
+          <div class="flex space-x-4">
+            <a
+              href="#"
+              class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition"
+            >
+              <i class="fab fa-facebook-f mr-2"></i>Share
+            </a>
+            <a
+              href="#"
+              class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition"
+            >
+              <i class="fab fa-twitter mr-2"></i>Tweet
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2">
+          <div class="bg-gray-100 rounded-xl p-6 shadow-inner">
+            <h3 class="text-xl font-bold mb-4">Memory Training Tips</h3>
+            <ul class="space-y-4 list-none">
+              <li class="flex items-start">
+                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                  <i class="fas fa-check"></i>
+                </span>
+                Practice regularly – even 10 minutes daily makes a difference.
+              </li>
+              <li class="flex items-start">
+                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                  <i class="fas fa-check"></i>
+                </span>
+                Gradually increase difficulty to keep challenging your brain.
+              </li>
+              <li class="flex items-start">
+                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                  <i class="fas fa-check"></i>
+                </span>
+                Focus on accuracy first, then work on speed.
+              </li>
+              <li class="flex items-start">
+                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                  <i class="fas fa-check"></i>
+                </span>
+                Combine memory training with physical exercise for best results.
+              </li>
+              <li class="flex items-start">
+                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                  <i class="fas fa-check"></i>
+                </span>
+                Ensure adequate sleep to consolidate improvements.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-        // 开始一轮
-        function startRound() {
-            userInput = [];
-            document.getElementById('next-round').classList.add('hidden');
-            document.getElementById('back-to-menu').classList.add('hidden');
-            document.getElementById('level-display').textContent = `关卡: ${currentLevel}`;
-            document.getElementById('score-display').textContent = `得分: ${currentScore}`;
-            document.getElementById('game-sequence').className = "text-center text-4xl font-bold mb-6";
-            // 生成序列
-            currentSequence = gameConfigs[currentGame].generateSequence(currentLevel);
-            // 显示序列
-            showSequence(0);
-        }
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center">
+          <i class="fas fa-brain mr-2"></i>Memory Master
+        </h3>
+        <p class="text-gray-400">
+          Fun and effective brain training games to improve your memory and cognitive skills.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Games</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#games" class="hover:text-white">Number Memory</a></li>
+          <li><a href="#games" class="hover:text-white">Letter Memory</a></li>
+          <li><a href="#games" class="hover:text-white">Chinese Character Memory</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Resources</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#benefits" class="hover:text-white">Memory Benefits</a></li>
+          <li><a href="#about" class="hover:text-white">Training Tips</a></li>
+          <li><a href="#" class="hover:text-white">Research</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Connect</h4>
+        <div class="flex space-x-4 mb-4">
+          <a href="#" class="bg-gray-700 hover:bg-blue-600 p-2 rounded-full">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="bg-gray-700 hover:bg-blue-400 p-2 rounded-full">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="bg-gray-700 hover:bg-pink-600 p-2 rounded-full">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+        <p class="text-gray-400">Subscribe to our newsletter for tips and updates.</p>
+      </div>
+    </div>
+    <div class="border-t border-gray-800 pt-6 text-center text-gray-500">
+      &copy; 2023 Memory Master. All rights reserved.
+    </div>
+  </footer>
 
-        // 依次显示序列
-        function showSequence(index) {
-            const sequenceDiv = document.getElementById('game-sequence');
-            const inputDiv = document.getElementById('game-input');
-            inputDiv.innerHTML = '';
-            if (index < currentSequence.length) {
-                sequenceDiv.textContent = gameConfigs[currentGame].displayItem(currentSequence[index]);
-                setTimeout(() => {
-                    sequenceDiv.textContent = '';
-                    setTimeout(() => showSequence(index + 1), 400);
-                }, 800);
-            } else {
-                // 显示输入选项
-                showInputOptions();
-            }
-        }
+  <!-- Game Logic (deferred for performance) -->
+  <script src="game-logic.js" type="module" defer></script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('[data-mobile-menu-button]').addEventListener('click', () => {
+      document.querySelector('[data-mobile-menu]').classList.toggle('hidden');
+    });
 
-        // 显示输入按钮
-        function showInputOptions() {
-            const inputDiv = document.getElementById('game-input');
-            inputDiv.innerHTML = '';
-            gameConfigs[currentGame].inputOptions.forEach(option => {
-                const btn = document.createElement('button');
-                btn.textContent = option;
-                btn.className = "bg-gray-200 hover:bg-gray-300 text-xl px-4 py-2 rounded-lg font-bold transition";
-                btn.onclick = () => handleUserInput(option);
-                inputDiv.appendChild(btn);
-            });
-        }
+    // Dynamically render game cards
+    const games = [
+      {
+        id: 'number',
+        colors: 'from-blue-500 to-blue-600',
+        icon: '1 2 3',
+        title: 'Number Memory',
+        desc: 'Test your ability to remember sequences of numbers. Start small and build up!',
+      },
+      {
+        id: 'letter',
+        colors: 'from-purple-500 to-purple-600',
+        icon: 'A B C',
+        title: 'Letter Memory',
+        desc: 'Challenge yourself with sequences of letters—great for language learners!',
+      },
+      {
+        id: 'chinese',
+        colors: 'from-green-500 to-green-600',
+        icon: '汉 字 记',
+        title: 'Chinese Character Memory',
+        desc: 'Test your visual memory with Chinese characters—ideal for Mandarin learners.',
+      },
+    ];
 
-        // 处理用户输入
-        function handleUserInput(option) {
-            userInput.push(option);
-            if (userInput.length === currentSequence.length) {
-                checkAnswer();
-            }
-        }
-
-        // 检查答案
-        function checkAnswer() {
-            const isCorrect = userInput.every((val, idx) => val === currentSequence[idx]);
-            const sequenceDiv = document.getElementById('game-sequence');
-            if (isCorrect) {
-                currentScore += currentLevel * 10;
-                currentLevel++;
-                sequenceDiv.textContent = "答对了！";
-                sequenceDiv.className = "text-center text-4xl font-bold mb-6 text-green-500";
-                document.getElementById('next-round').classList.remove('hidden');
-            } else {
-                sequenceDiv.textContent = "答错了，游戏结束！";
-                sequenceDiv.className = "text-center text-4xl font-bold mb-6 text-red-500";
-                document.getElementById('back-to-menu').classList.remove('hidden');
-            }
-            document.getElementById('score-display').textContent = `得分: ${currentScore}`;
-        }
-
-        // 下一关
-        document.getElementById('next-round').addEventListener('click', startRound);
-
-        // 返回菜单
-        document.getElementById('back-to-menu').addEventListener('click', function() {
-            document.getElementById('game-area').classList.add('hidden');
-            document.getElementById('games').classList.remove('hidden');
-        });
-    </script>
+    const container = document.querySelector('#games .max-w-6xl > div');
+    container.innerHTML = '';
+    games.forEach(({ id, colors, icon, title, desc }) => {
+      const tpl = document.getElementById('game-card-template').content.cloneNode(true);
+      const card = tpl.querySelector('div');
+      card.querySelector('.h-48').classList.replace(
+        'bg-gradient-to-r',
+        `bg-gradient-to-r ${colors}`
+      );
+      tpl.querySelector('.h-48 span').textContent = icon;
+      tpl.querySelector('h3').textContent = title;
+      tpl.querySelector('p').textContent = desc;
+      tpl.querySelector('button').addEventListener('click', () => startGame(id));
+      container.appendChild(tpl);
+    });
+  </script>
 </body>
 </html>
 
