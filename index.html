@@ -4,266 +4,252 @@
     <meta charset="UTF-8">
     <title>记忆力大师 - Memory Master</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="提升记忆力，挑战你的大脑！字母与汉字记忆力训练小游戏。">
-    <meta name="keywords" content="记忆力, 脑力训练, 英文字母, 汉字, 游戏, brain training, memory game, chinese memory">
+    <meta name="description" content="提升记忆力的趣味游戏 - 数字记忆、字母记忆、汉字记忆">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: 'Poppins', 'Microsoft YaHei', sans-serif;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
         }
         .game-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.10);
+            transition: transform 0.3s ease;
         }
         .game-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
         }
     </style>
 </head>
 <body>
-    <section class="py-12">
-        <div class="container mx-auto px-4">
-            <h1 class="text-center text-4xl font-bold mb-8 text-gray-800">记忆力大师</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="games">
-                <!-- Letter Memory Game -->
-                <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg">
-                    <div class="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">A B C</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">字母记忆</h3>
-                        <p class="text-gray-600 mb-4">记住出现的字母顺序，然后按顺序回忆。锻炼你的英文短时记忆力~</p>
-                        <button onclick="startGame('letter')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
-                            开始游戏 <i class="fas fa-play ml-2"></i>
-                        </button>
-                    </div>
+    <!-- 游戏选择界面 -->
+    <div class="container mx-auto px-4 py-8" id="game-selection">
+        <h1 class="text-3xl font-bold text-center mb-8">记忆力大师</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 数字记忆游戏 -->
+            <div class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="h-40 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                    <span class="text-white text-5xl font-bold">123</span>
                 </div>
-                <!-- Chinese Character Memory Game -->
-                <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg">
-                    <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">水 火 山</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">汉字记忆</h3>
-                        <p class="text-gray-600 mb-4">用汉字挑战你的视觉记忆，非常适合中文学习者与记忆爱好者。</p>
-                        <button onclick="startGame('chinese')" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
-                            开始游戏 <i class="fas fa-play ml-2"></i>
-                        </button>
-                    </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">数字记忆</h3>
+                    <p class="text-gray-600 mb-4">记住显示的数字序列，考验你的数字记忆能力！</p>
+                    <button onclick="startGame('number')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+                        开始游戏
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Game Area -->
-    <section id="game-area" class="py-12 hidden">
-        <div class="container mx-auto px-4">
-            <button id="back-menu" class="mb-6 text-gray-600 hover:text-blue-700 transition" onclick="backToMenu()">
-                <i class="fa fa-arrow-left mr-1"></i> 返回菜单
-            </button>
-            <h2 id="game-title" class="text-2xl font-bold text-gray-800 mb-3"></h2>
-            <p id="game-desc" class="mb-4 text-gray-500"></p>
-            <div class="mb-4 flex items-center gap-6">
-                <span id="level-display" class="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">关卡: 1</span>
-                <span id="score-display" class="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-medium">得分: 0</span>
+            <!-- 字母记忆游戏 -->
+            <div class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="h-40 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
+                    <span class="text-white text-5xl font-bold">ABC</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">字母记忆</h3>
+                    <p class="text-gray-600 mb-4">记住显示的字母顺序，提升英文记忆能力！</p>
+                    <button onclick="startGame('letter')" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg transition">
+                        开始游戏
+                    </button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                <div id="game-sequence" class="text-center text-4xl font-bold mb-6 min-h-[48px]"></div>
-                <div id="game-input" class="flex flex-wrap gap-2 justify-center mb-6"></div>
-                <div id="user-input" class="flex flex-wrap gap-2 justify-center mb-4"></div>
-                <div id="result-message" class="text-center text-2xl font-semibold my-4"></div>
-                <button id="next-level" class="hidden bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition">下一关</button>
-                <button id="restart-game" class="hidden bg-gray-400 hover:bg-gray-500 text-white py-2 px-6 rounded-lg font-medium transition">重新开始</button>
+
+            <!-- 汉字记忆游戏 -->
+            <div class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="h-40 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
+                    <span class="text-white text-5xl font-bold">中文</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">汉字记忆</h3>
+                    <p class="text-gray-600 mb-4">记住显示的汉字顺序，锻炼视觉记忆能力！</p>
+                    <button onclick="startGame('chinese')" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition">
+                        开始游戏
+                    </button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- 游戏界面 -->
+    <div class="container mx-auto px-4 py-8 hidden" id="game-area">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="backToMenu()" class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-arrow-left mr-2"></i>返回
+                </button>
+                <div class="flex gap-4">
+                    <span id="level" class="bg-blue-100 px-4 py-2 rounded-lg">关卡: 1</span>
+                    <span id="score" class="bg-green-100 px-4 py-2 rounded-lg">得分: 0</span>
+                </div>
+            </div>
+            
+            <div id="game-display" class="text-center mb-8">
+                <div id="sequence" class="text-4xl font-bold mb-4 h-20 flex items-center justify-center"></div>
+                <div id="message" class="text-xl text-gray-600 mb-4"></div>
+                <div id="input-area" class="flex flex-wrap gap-2 justify-center"></div>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button id="next-level" class="hidden bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
+                    下一关
+                </button>
+                <button id="retry" class="hidden bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition">
+                    重试
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Game logic and config
-        const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        const CHINESE = ['水','火','山','木','田','日','月','金','土','风','雨','云','石','竹','花','草','鱼','鸟','马','牛'];
-        const GAME_CONFIGS = {
+        // 游戏配置
+        const gameConfig = {
+            number: {
+                title: "数字记忆",
+                generateSequence: (level) => {
+                    return Array.from({length: level + 2}, () => Math.floor(Math.random() * 10));
+                },
+                options: Array.from({length: 10}, (_, i) => i.toString())
+            },
             letter: {
-                title: "字母记忆挑战",
-                desc: "依次记住并输入出现过的英文字母。每一关字母数量会增加。",
-                inputOptions: LETTERS.slice(),
-                genSequence: lvl => Array.from({length: lvl+2}, ()=>LETTERS[Math.floor(Math.random()*LETTERS.length)]),
+                title: "字母记忆",
+                generateSequence: (level) => {
+                    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    return Array.from({length: level + 2}, () => letters[Math.floor(Math.random() * letters.length)]);
+                },
+                options: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
             },
             chinese: {
-                title: "汉字记忆挑战",
-                desc: "依次记住并输入出现过的汉字。每一关汉字数量会增加。",
-                inputOptions: CHINESE.slice(),
-                genSequence: lvl => Array.from({length: lvl+1}, ()=>CHINESE[Math.floor(Math.random()*CHINESE.length)]),
+                title: "汉字记忆",
+                generateSequence: (level) => {
+                    const chars = ['山', '水', '木', '火', '土', '天', '日', '月', '人', '心'];
+                    return Array.from({length: level + 1}, () => chars[Math.floor(Math.random() * chars.length)]);
+                },
+                options: ['山', '水', '木', '火', '土', '天', '日', '月', '人', '心']
             }
         };
 
-        // State
+        // 游戏状态
         let currentGame = null;
         let currentLevel = 1;
-        let currentScore = 0;
-        let currentSequence = [];
+        let score = 0;
+        let sequence = [];
         let userInput = [];
-        let inputLocked = false;
+        let canInput = false;
 
-        // DOM refs
+        // DOM 元素
+        const gameSelection = document.getElementById('game-selection');
         const gameArea = document.getElementById('game-area');
-        const gamesMenu = document.getElementById('games');
-        const levelDisplay = document.getElementById('level-display');
-        const scoreDisplay = document.getElementById('score-display');
-        const titleDisplay = document.getElementById('game-title');
-        const descDisplay = document.getElementById('game-desc');
-        const sequenceDiv = document.getElementById('game-sequence');
-        const inputDiv = document.getElementById('game-input');
-        const userInputDiv = document.getElementById('user-input');
-        const resultMessage = document.getElementById('result-message');
+        const sequenceDisplay = document.getElementById('sequence');
+        const messageDisplay = document.getElementById('message');
+        const inputArea = document.getElementById('input-area');
+        const levelDisplay = document.getElementById('level');
+        const scoreDisplay = document.getElementById('score');
         const nextLevelBtn = document.getElementById('next-level');
-        const restartBtn = document.getElementById('restart-game');
-        const backMenuBtn = document.getElementById('back-menu');
+        const retryBtn = document.getElementById('retry');
 
-        // Start chosen game
+        // 开始游戏
         function startGame(type) {
             currentGame = type;
             currentLevel = 1;
-            currentScore = 0;
-            showGameScreen();
+            score = 0;
+            gameSelection.classList.add('hidden');
+            gameArea.classList.remove('hidden');
+            updateDisplay();
             startLevel();
         }
 
-        function showGameScreen() {
-            gamesMenu.classList.add('hidden');
-            gameArea.classList.remove('hidden');
-            titleDisplay.textContent = GAME_CONFIGS[currentGame].title;
-            descDisplay.textContent = GAME_CONFIGS[currentGame].desc;
-        }
-
-        function backToMenu() {
-            gameArea.classList.add('hidden');
-            gamesMenu.classList.remove('hidden');
-        }
-
+        // 开始新关卡
         function startLevel() {
-            // Reset state and UI
+            sequence = gameConfig[currentGame].generateSequence(currentLevel);
             userInput = [];
-            inputLocked = true;
-            resultMessage.textContent = '';
+            canInput = false;
             nextLevelBtn.classList.add('hidden');
-            restartBtn.classList.add('hidden');
-            inputDiv.innerHTML = '';
-            userInputDiv.innerHTML = '';
-            updateLevelScore();
-            // Generate sequence
-            currentSequence = GAME_CONFIGS[currentGame].genSequence(currentLevel);
-
-            // Show sequence (animated)
-            let i = 0;
-            sequenceDiv.textContent = '';
-            const showNext = () => {
-                if (i < currentSequence.length) {
-                    sequenceDiv.textContent = currentSequence[i];
-                    i++;
-                    setTimeout(() => {
-                        sequenceDiv.textContent = '';
-                        setTimeout(showNext, 350);
-                    }, 750);
-                } else {
-                    setTimeout(() => {
-                        // Show input options
-                        sequenceDiv.textContent = '';
-                        inputLocked = false;
-                        showInputOptions();
-                        updateUserInput();
-                    }, 300);
-                }
-            };
-            showNext();
+            retryBtn.classList.add('hidden');
+            showSequence();
         }
 
+        // 显示序列
+        function showSequence(index = 0) {
+            if (index < sequence.length) {
+                sequenceDisplay.textContent = sequence[index];
+                setTimeout(() => {
+                    sequenceDisplay.textContent = '';
+                    setTimeout(() => showSequence(index + 1), 300);
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    messageDisplay.textContent = '请重复序列';
+                    showInputOptions();
+                    canInput = true;
+                }, 300);
+            }
+        }
+
+        // 显示输入选项
         function showInputOptions() {
-            inputDiv.innerHTML = '';
-            GAME_CONFIGS[currentGame].inputOptions.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.textContent = opt;
-                btn.className = 'bg-gray-200 hover:bg-gray-400 text-xl px-4 py-2 rounded-lg font-bold m-1 transition';
-                btn.disabled = inputLocked;
-                btn.onclick = () => onInput(opt);
-                inputDiv.appendChild(btn);
+            inputArea.innerHTML = '';
+            gameConfig[currentGame].options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = 'bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition';
+                button.onclick = () => handleInput(option);
+                inputArea.appendChild(button);
             });
         }
 
-        function onInput(val) {
-            if (inputLocked) return;
-            userInput.push(val);
-            updateUserInput();
-            if (userInput.length === currentSequence.length) {
+        // 处理输入
+        function handleInput(value) {
+            if (!canInput) return;
+            userInput.push(value);
+            updateSequenceDisplay();
+            
+            if (userInput.length === sequence.length) {
                 checkAnswer();
             }
         }
 
-        function updateUserInput() {
-            // userInput display
-            userInputDiv.innerHTML = '';
-            userInput.forEach((item, idx) => {
-                const span = document.createElement('span');
-                span.textContent = item;
-                span.className = "bg-blue-100 border border-blue-200 rounded-lg px-4 py-2 text-xl font-medium mx-1 mb-2";
-                userInputDiv.appendChild(span);
-            });
-            // Dashes for remaining
-            for (let i = userInput.length; i < currentSequence.length; i++) {
-                const dash = document.createElement('span');
-                dash.textContent = '';
-                dash.className = "border-2 border-dashed border-gray-300 rounded-lg px-4 py-2 text-xl mx-1 mb-2";
-                userInputDiv.appendChild(dash);
-            }
+        // 更新序列显示
+        function updateSequenceDisplay() {
+            sequenceDisplay.innerHTML = userInput.join(' ');
         }
 
+        // 检查答案
         function checkAnswer() {
-            inputLocked = true;
-            inputDiv.querySelectorAll('button').forEach(btn=>btn.disabled=true);
-            const isOK = userInput.every((v,i)=>v===currentSequence[i]);
-            if (isOK) {
-                resultMessage.textContent = "🎉 恭喜答对！";
-                resultMessage.className = "text-center text-2xl font-semibold my-4 text-green-600";
-                currentScore += currentLevel * 10;
+            canInput = false;
+            const correct = sequence.every((val, idx) => val === userInput[idx]);
+            
+            if (correct) {
+                messageDisplay.textContent = '答对了！';
+                score += currentLevel * 10;
+                currentLevel++;
                 nextLevelBtn.classList.remove('hidden');
             } else {
-                resultMessage.textContent = "❌ 回答错误，游戏结束！";
-                resultMessage.className = "text-center text-2xl font-semibold my-4 text-red-600";
-                restartBtn.classList.remove('hidden');
+                messageDisplay.textContent = '答错了！';
+                retryBtn.classList.remove('hidden');
             }
-            updateLevelScore();
+            updateDisplay();
         }
 
-        nextLevelBtn.onclick = function() {
-            currentLevel += 1;
-            startLevel();
-        };
-        restartBtn.onclick = function() {
-            currentLevel = 1;
-            currentScore = 0;
-            startLevel();
-        };
-
-        function updateLevelScore() {
+        // 更新显示
+        function updateDisplay() {
             levelDisplay.textContent = `关卡: ${currentLevel}`;
-            scoreDisplay.textContent = `得分: ${currentScore}`;
+            scoreDisplay.textContent = `得分: ${score}`;
         }
 
-        // For keyboard support (optional)
-        document.addEventListener('keydown', function(e){
-            if (!inputLocked && /^[a-zA-Z]$/.test(e.key) && currentGame === 'letter') {
-                let k = e.key.toUpperCase();
-                if (GAME_CONFIGS.letter.inputOptions.includes(k)) {
-                    onInput(k);
-                }
-            }
-        });
+        // 返回菜单
+        function backToMenu() {
+            gameArea.classList.add('hidden');
+            gameSelection.classList.remove('hidden');
+        }
+
+        // 事件监听
+        nextLevelBtn.onclick = startLevel;
+        retryBtn.onclick = () => {
+            currentLevel = 1;
+            score = 0;
+            startLevel();
+        };
     </script>
 </body>
 </html>
-
 
