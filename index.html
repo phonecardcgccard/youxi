@@ -1,399 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic Meta -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yourdomain.com" />
-  <meta name="theme-color" content="#0066cc" />
-
-  <title>Memory Master – Fun Brain Training Games</title>
-  <meta
-    name="description"
-    content="Train your memory, focus, and cognitive skills with Number, Letter, and Chinese Character memory games."
-  />
-  <meta
-    name="keywords"
-    content="memory game, brain training, number memory, letter memory, Chinese character memory"
-  />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Memory Master – Fun Brain Training Games" />
-  <meta
-    property="og:description"
-    content="Train your memory, focus, and cognitive skills with our fun and challenging games."
-  />
-  <meta property="og:image" content="https://yourdomain.com/og-image.png" />
-  <meta property="og:url" content="https://yourdomain.com" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico" />
-
-  <!-- Tailwind & FontAwesome -->
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha384-..."
-    crossorigin="anonymous"
-  />
-
-  <!-- Custom Styles -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Master - Fun Brain Training Games</title>
+  <meta name="description" content="Improve your memory with our fun brain training games. Challenge yourself with number, letter, and Chinese character memory games.">
+  <meta name="keywords" content="memory game, brain training, number memory, letter memory, Chinese character memory, cognitive exercise">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/css/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @layer utilities {
-      .pulse-animation {
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-      }
-      .fade-in {
-        animation: fadeIn 0.5s ease-in;
-      }
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    
+    .card-flip {
+      perspective: 1000px;
+    }
+    
+    .card-flip-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .card-flip.flipped .card-flip-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .card-flip-front, .card-flip-back {
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .card-flip-back {
+      transform: rotateY(180deg);
+    }
+    
+    .game-card {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .memory-tile {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .memory-tile:hover {
+      transform: scale(1.03);
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-white text-gray-800 leading-relaxed">
-
-  <!-- Header / Navigation -->
+<body class="text-gray-800">
+  <!-- Header with Navigation -->
   <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between">
-      <a href="#home" class="flex items-center space-x-2">
-        <i class="fas fa-brain text-3xl"></i>
-        <h1 class="text-2xl font-bold">Memory Master</h1>
-      </a>
-      <nav class="hidden md:flex space-x-6" aria-label="Main navigation">
-        <a href="#home" class="hover:text-blue-200">Home</a>
-        <a href="#games" class="hover:text-blue-200">Games</a>
-        <a href="#about" class="hover:text-blue-200">About</a>
-        <a href="#benefits" class="hover:text-blue-200">Benefits</a>
-      </nav>
-      <button
-        aria-label="Toggle menu"
-        data-mobile-menu-button
-        class="md:hidden text-2xl focus:outline-none"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
-    </div>
-    <nav
-      id="mobile-menu"
-      class="md:hidden hidden bg-blue-700"
-      aria-label="Mobile navigation"
-      data-mobile-menu
-    >
-      <div class="px-4 py-4 flex flex-col space-y-3">
-        <a href="#home" class="hover:text-blue-200">Home</a>
-        <a href="#games" class="hover:text-blue-200">Games</a>
-        <a href="#about" class="hover:text-blue-200">About</a>
-        <a href="#benefits" class="hover:text-blue-200">Benefits</a>
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-brain text-3xl"></i>
+          <h1 class="text-2xl md:text-3xl font-bold">Memory Master</h1>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <a href="#home" class="hover:text-blue-200 font-medium transition">Home</a>
+          <a href="#games" class="hover:text-blue-200 font-medium transition">Games</a>
+          <a href="#about" class="hover:text-blue-200 font-medium transition">About</a>
+          <a href="#benefits" class="hover:text-blue-200 font-medium transition">Benefits</a>
+        </nav>
+        <button class="md:hidden text-2xl" id="mobile-menu-button">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
-    </nav>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="md:hidden hidden bg-blue-700 py-4" id="mobile-menu">
+      <div class="container mx-auto px-4 flex flex-col space-y-3">
+        <a href="#home" class="hover:text-blue-200 font-medium transition">Home</a>
+        <a href="#games" class="hover:text-blue-200 font-medium transition">Games</a>
+        <a href="#about" class="hover:text-blue-200 font-medium transition">About</a>
+        <a href="#benefits" class="hover:text-blue-200 font-medium transition">Benefits</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <!-- Hero / Banner -->
-    <section id="home" class="py-16 md:py-24">
-      <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center">
+  <!-- Hero Section -->
+  <section id="home" class="py-16 md:py-24 bg-gradient-to-b from-blue-50 to-white">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-1/2 mb-10 md:mb-0">
-          <h2 class="text-4xl md:text-5xl font-bold mb-4">
-            Train Your Brain <span class="text-blue-600">Everyday</span>
-          </h2>
-          <p class="text-lg text-gray-600 mb-6">
-            Improve your memory, focus, and cognitive skills with our fun and
-            challenging memory games. Perfect for all ages!
-          </p>
+          <h2 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800">Train Your Brain <span class="text-blue-600">Everyday</span></h2>
+          <p class="text-lg text-gray-600 mb-8">Improve your memory, focus, and cognitive skills with our fun and challenging memory games. Perfect for all ages!</p>
           <div class="flex space-x-4">
-            <a
-              href="#games"
-              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow-lg"
-            >
+            <a href="#games" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow-lg">
               Play Now <i class="fas fa-gamepad ml-2"></i>
             </a>
-            <a
-              href="#benefits"
-              class="bg-white hover:bg-gray-100 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow"
-            >
+            <a href="#benefits" class="bg-white hover:bg-gray-100 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 shadow">
               Learn Benefits <i class="fas fa-info-circle ml-2"></i>
             </a>
           </div>
         </div>
         <div class="md:w-1/2 flex justify-center">
           <div class="relative w-64 h-64 md:w-80 md:h-80">
-            <div class="absolute inset-0 rounded-full bg-blue-100 opacity-30 animate-pulse"></div>
-            <div class="absolute inset-4 rounded-full bg-blue-200 opacity-30 animate-pulse"></div>
-            <div class="absolute inset-8 rounded-full bg-blue-300 opacity-30 animate-pulse"></div>
-            <img
-              src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800"
-              alt="Abstract representation of brain training"
-              class="relative w-full h-full object-cover rounded-full border-8 border-white shadow-xl"
-            />
+            <div class="absolute top-0 left-0 w-full h-full bg-blue-100 rounded-full opacity-30 animate-pulse"></div>
+            <div class="absolute top-4 left-4 w-full h-full bg-blue-200 rounded-full opacity-30 animate-pulse delay-100"></div>
+            <div class="absolute top-8 left-8 w-full h-full bg-blue-300 rounded-full opacity-30 animate-pulse delay-200"></div>
+            <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+              alt="Brain training" 
+              class="relative w-full h-full object-cover rounded-full border-8 border-white shadow-xl">
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Games Section -->
-    <section id="games" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Memory Challenge Games</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Choose from our selection of memory games designed to test and improve
-          different aspects of your cognitive abilities.
-        </p>
+  <!-- Games Section -->
+  <section id="games" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Memory Challenge Games</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">Choose from our selection of memory games designed to test and improve different aspects of your cognitive abilities.</p>
       </div>
-      <div id="game-grid" class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Cards will be injected here -->
-      </div>
-      <template id="game-card-template">
-        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-          <div class="h-48 flex items-center justify-center text-white text-6xl font-bold bg-gradient-to-r"></div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Number Memory Game -->
+        <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+          <div class="h-48 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+            <span class="text-white text-6xl font-bold">1 2 3</span>
+          </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold mb-3 text-gray-800"></h3>
-            <p class="text-gray-600 mb-4"></p>
-            <button
-              class="w-full text-white py-2 rounded-lg font-medium transition flex items-center justify-center"
-            >
+            <h3 class="text-xl font-bold mb-3 text-gray-800">Number Memory</h3>
+            <p class="text-gray-600 mb-4">Test your ability to remember sequences of numbers. Start with short sequences and work your way up!</p>
+            <button onclick="startGame('number')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
               Play Game <i class="fas fa-play ml-2"></i>
             </button>
           </div>
         </div>
-      </template>
-    </section>
-
-    <!-- Dynamic Game Area -->
-    <section id="game-area" class="py-16 bg-gray-50 hidden" aria-live="polite"></section>
-
-    <!-- Benefits Section -->
-    <section id="benefits" class="py-16 bg-gradient-to-b from-white to-blue-50">
-      <div class="max-w-6xl mx-auto px-4 text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Benefits of Memory Training</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Regular memory exercises can provide numerous cognitive and everyday
-          life benefits.
-        </p>
+        
+        <!-- Letter Memory Game -->
+        <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+          <div class="h-48 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
+            <span class="text-white text-6xl font-bold">A B C</span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3 text-gray-800">Letter Memory</h3>
+            <p class="text-gray-600 mb-4">Challenge your memory with sequences of English letters. Perfect for language learners!</p>
+            <button onclick="startGame('letter')" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
+              Play Game <i class="fas fa-play ml-2"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Chinese Character Memory Game -->
+        <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+          <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
+            <span class="text-white text-6xl font-bold">şş ×Ö ĽÇ</span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3 text-gray-800">Chinese Character Memory</h3>
+            <p class="text-gray-600 mb-4">Test your visual memory with Chinese characters. Great for Mandarin learners and memory enthusiasts.</p>
+            <button onclick="startGame('chinese')" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center">
+              Play Game <i class="fas fa-play ml-2"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    </div>
+  </section>
+
+  <!-- Game Area (Hidden by default) -->
+  <section id="game-area" class="py-16 bg-gray-50 hidden">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-8">
+        <h2 id="game-title" class="text-2xl md:text-3xl font-bold text-gray-800"></h2>
+        <div class="flex items-center space-x-4">
+          <span id="level-display" class="bg-gray-200 px-4 py-2 rounded-lg font-medium">Level: 1</span>
+          <span id="score-display" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">Score: 0</span>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div id="game-instructions" class="mb-6 p-4 bg-blue-50 rounded-lg">
+          <h3 class="font-bold text-lg text-blue-800 mb-2">How to Play:</h3>
+          <p id="instructions-text" class="text-gray-700"></p>
+        </div>
+        
+        <div id="sequence-display" class="flex justify-center items-center h-32 mb-8 bg-gray-100 rounded-lg hidden">
+          <div id="sequence-content" class="text-4xl font-bold"></div>
+        </div>
+        
+        <div id="user-input-area" class="hidden">
+          <h3 class="text-lg font-medium mb-4 text-gray-700">Your Turn:</h3>
+          <div id="input-tiles" class="grid grid-cols-4 md:grid-cols-6 gap-4 mb-6"></div>
+          <div class="flex justify-between">
+            <button id="submit-answer" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
+              Submit <i class="fas fa-check ml-2"></i>
+            </button>
+            <button id="reset-input" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium transition">
+              Reset <i class="fas fa-redo ml-2"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div id="result-display" class="hidden mt-6 p-4 rounded-lg text-center">
+          <h3 id="result-message" class="text-2xl font-bold mb-2"></h3>
+          <p id="result-details" class="text-lg mb-4"></p>
+          <button id="next-round" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
+            Next Round <i class="fas fa-arrow-right ml-2"></i>
+          </button>
+        </div>
+        
+        <div id="game-start" class="text-center py-8">
+          <button id="start-game-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium text-lg transition transform hover:scale-105 shadow-lg pulse-animation">
+            Start Game <i class="fas fa-play ml-2"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <button onclick="backToGames()" class="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-center mx-auto">
+          <i class="fas fa-arrow-left mr-2"></i> Back to All Games
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section id="benefits" class="py-16 bg-gradient-to-b from-white to-blue-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Benefits of Memory Training</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">Regular memory exercises can provide numerous cognitive and everyday life benefits.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
           <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
-            <i class="fas fa-brain text-2xl"></i>
+            <i class="fas fa-brain text-3xl"></i>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-800">Enhanced Cognitive Function</h3>
-          <p class="text-gray-600">
-            Stimulate neural pathways to improve processing speed and mental flexibility.
-          </p>
+          <p class="text-gray-600">Memory games stimulate neural pathways, improving overall brain function, processing speed, and mental flexibility.</p>
         </div>
+        
         <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
           <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600">
-            <i class="fas fa-book-reader text-2xl"></i>
+            <i class="fas fa-book-reader text-3xl"></i>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-800">Better Learning Ability</h3>
-          <p class="text-gray-600">
-            Efficiently learn and retain new information in academic and professional settings.
-          </p>
+          <p class="text-gray-600">Improved memory leads to more efficient learning and retention of new information in academic and professional settings.</p>
         </div>
+        
         <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
           <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600">
-            <i class="fas fa-heartbeat text-2xl"></i>
+            <i class="fas fa-heartbeat text-3xl"></i>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-800">Long-term Brain Health</h3>
-          <p class="text-gray-600">
-            Regular mental exercise helps delay age-related cognitive decline.
-          </p>
+          <p class="text-gray-600">Regular mental exercise can help delay age-related cognitive decline and reduce the risk of memory-related disorders.</p>
         </div>
       </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center">
-        <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-          <h2 class="text-3xl md:text-4xl font-bold mb-6">About Memory Master</h2>
-          <p class="text-gray-600 mb-4">
-            Memory Master offers scientifically-designed games focused on working
-            memory, pattern recognition, and cognitive flexibility.
-          </p>
-          <p class="text-gray-600 mb-6">
-            Developed from cognitive psychology research to provide effective
-            mental exercise for students, professionals, and seniors alike.
-          </p>
-          <div class="flex space-x-4">
-            <a
-              href="#"
-              class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition"
-            >
-              <i class="fab fa-facebook-f mr-2"></i>Share
+      
+      <div class="mt-12 bg-blue-600 rounded-xl p-8 text-white">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-2/3 mb-6 md:mb-0">
+            <h3 class="text-2xl font-bold mb-3">Ready to boost your memory?</h3>
+            <p class="text-blue-100">Start playing our memory games today and track your progress over time. Challenge yourself daily for maximum benefits!</p>
+          </div>
+          <div class="md:w-1/3 flex justify-center md:justify-end">
+            <a href="#games" class="bg-white hover:bg-gray-100 text-blue-600 px-8 py-3 rounded-lg font-medium text-lg transition transform hover:scale-105 shadow-lg">
+              Play Now <i class="fas fa-gamepad ml-2"></i>
             </a>
-            <a
-              href="#"
-              class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition"
-            >
-              <i class="fab fa-twitter mr-2"></i>Tweet
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">About Memory Master</h2>
+          <p class="text-gray-600 mb-4">Memory Master is a collection of scientifically-designed brain training games focused on improving working memory, pattern recognition, and cognitive abilities. Our games are developed based on research from cognitive psychology and neuroscience to provide effective mental exercise.</p>
+          <p class="text-gray-600 mb-6">Whether you're a student looking to improve learning, a professional wanting to stay sharp, or a senior aiming to maintain cognitive health, our games challenge you and help you achieve peak mental performance.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition">
+              <i class="fab fa-facebook-f mr-2"></i> Share
+            </a>
+            <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-6 py-2 rounded-lg font-medium transition">
+              <i class="fab fa-twitter mr-2"></i> Tweet
             </a>
           </div>
         </div>
         <div class="md:w-1/2">
           <div class="bg-gray-100 rounded-xl p-6 shadow-inner">
-            <h3 class="text-xl font-bold mb-4">Memory Training Tips</h3>
-            <ul class="space-y-4 list-none">
-              <li class="flex items-start">
-                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Memory Training Tips</h3>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
                   <i class="fas fa-check"></i>
-                </span>
-                Practice regularly – even 10 minutes daily makes a difference.
-              </li>
-              <li class="flex items-start">
-                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                </div>
+                <p class="text-gray-700">Practice regularly - even 10 minutes daily can make a difference</p>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
                   <i class="fas fa-check"></i>
-                </span>
-                Gradually increase difficulty to keep challenging your brain.
-              </li>
-              <li class="flex items-start">
-                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                </div>
+                <p class="text-gray-700">Gradually increase difficulty to continue challenging your brain</p>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
                   <i class="fas fa-check"></i>
-                </span>
-                Focus on accuracy first, then work on speed.
-              </li>
-              <li class="flex items-start">
-                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                </div>
+                <p class="text-gray-700">Focus on accuracy first, then work on speed</p>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
                   <i class="fas fa-check"></i>
-                </span>
-                Combine memory training with physical exercise for best results.
-              </li>
-              <li class="flex items-start">
-                <span class="bg-blue-100 text-blue-800 rounded-full p-2 mr-4">
+                </div>
+                <p class="text-gray-700">Combine memory training with physical exercise for best results</p>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
                   <i class="fas fa-check"></i>
-                </span>
-                Ensure adequate sleep to consolidate improvements.
-              </li>
-            </ul>
+                </div>
+                <p class="text-gray-700">Get adequate sleep to consolidate memory improvements</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-white py-12">
-    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-      <div>
-        <h3 class="text-xl font-bold mb-4 flex items-center">
-          <i class="fas fa-brain mr-2"></i>Memory Master
-        </h3>
-        <p class="text-gray-400">
-          Fun and effective brain training games to improve your memory and cognitive skills.
-        </p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Games</h4>
-        <ul class="space-y-2 text-gray-400">
-          <li><a href="#games" class="hover:text-white">Number Memory</a></li>
-          <li><a href="#games" class="hover:text-white">Letter Memory</a></li>
-          <li><a href="#games" class="hover:text-white">Chinese Character Memory</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Resources</h4>
-        <ul class="space-y-2 text-gray-400">
-          <li><a href="#benefits" class="hover:text-white">Memory Benefits</a></li>
-          <li><a href="#about" class="hover:text-white">Training Tips</a></li>
-          <li><a href="#" class="hover:text-white">Research</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Connect</h4>
-        <div class="flex space-x-4 mb-4">
-          <a href="#" class="bg-gray-700 hover:bg-blue-600 p-2 rounded-full">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="bg-gray-700 hover:bg-blue-400 p-2 rounded-full">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="#" class="bg-gray-700 hover:bg-pink-600 p-2 rounded-full">
-            <i class="fab fa-instagram"></i>
-          </a>
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <i class="fas fa-brain mr-2"></i> Memory Master
+          </h3>
+          <p class="text-gray-400">Fun and effective brain training games to improve your memory and cognitive skills.</p>
         </div>
-        <p class="text-gray-400">Subscribe to our newsletter for tips and updates.</p>
+        <div>
+          <h3 class="text-lg font-bold mb-4">Games</h3>
+          <ul class="space-y-2">
+            <li><a href="#" onclick="startGame('number')" class="text-gray-400 hover:text-white transition">Number Memory</a></li>
+            <li><a href="#" onclick="startGame('letter')" class="text-gray-400 hover:text-white transition">Letter Memory</a></li>
+            <li><a href="#" onclick="startGame('chinese')" class="text-gray-400 hover:text-white transition">Chinese Character Memory</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-4">Resources</h3>
+          <ul class="space-y-2">
+            <li><a href="#benefits" class="text-gray-400 hover:text-white transition">Memory Benefits</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition">Training Tips</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Research</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-4">Connect</h3>
+          <div class="flex space-x-4 mb-4">
+            <a href="#" class="bg-gray-700 hover:bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center transition">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="bg-gray-700 hover:bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center transition">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="bg-gray-700 hover:bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center transition">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+          <p class="text-gray-400">Subscribe to our newsletter for tips and updates</p>
+        </div>
       </div>
-    </div>
-    <div class="border-t border-gray-800 pt-6 text-center text-gray-500">
-      &copy; 2023 Memory Master. All rights reserved.
+      <div class="pt-8 border-t border-gray-800 text-center text-gray-400">
+        <p>&copy; 2023 Memory Master. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
-  <!-- Game Logic (deferred for performance) -->
-  <script type="module" defer>
+  <!-- Game Logic Script -->
+  <script>
+    'use strict';
     // Mobile menu toggle
-    document.querySelector('[data-mobile-menu-button]').addEventListener('click', () => {
-      document.querySelector('[data-mobile-menu]').classList.toggle('hidden');
+    document.getElementById('mobile-menu-button').addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
     });
 
-    // Dynamically render game cards with correct class splitting
-    const games = [
-      {
-        id: 'number',
-        gradientFrom: 'from-blue-500',
-        gradientTo: 'to-blue-600',
-        baseColor: 'blue',
-        icon: '1 2 3',
-        title: 'Number Memory',
-        desc: 'Test your ability to remember sequences of numbers. Start small and build up!',
+    // Current game state
+    let currentGame = null;
+    let currentLevel = 1;
+    let currentScore = 0;
+    let currentSequence = [];
+    let userInput = [];
+
+    // Game configurations
+    const gameConfigs = {
+      number: {
+        title: "Number Memory Challenge",
+        instructions: "Memorize the sequence of numbers shown, then repeat it correctly. The sequence gets longer with each level.",
+        generateSequence: level => {
+          const sequence = [];
+          for (let i = 0; i < level + 2; i++) {
+            sequence.push(Math.floor(Math.random() * 10)); // Random digit 0-9
+          }
+          return sequence;
+        },
+        displayItem: item => item.toString(),
+        inputOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       },
-      {
-        id: 'letter',
-        gradientFrom: 'from-purple-500',
-        gradientTo: 'to-purple-600',
-        baseColor: 'purple',
-        icon: 'A B C',
-        title: 'Letter Memory',
-        desc: 'Challenge yourself with sequences of letters—great for language learners!',
+      letter: {
+        title: "Letter Memory Challenge",
+        instructions: "Memorize the sequence of letters shown, then repeat it correctly. Watch out for similar-looking letters!",
+        generateSequence: level => {
+          const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding I, O for clarity
+          const sequence = [];
+          for (let i = 0; i < level + 2; i++) {
+            const randomIndex = Math.floor(Math.random() * letters.length);
+            sequence.push(letters[randomIndex]);
+          }
+          return sequence;
+        },
+        displayItem: item => item,
+        inputOptions: 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('')
       },
-      {
-        id: 'chinese',
-        gradientFrom: 'from-green-500',
-        gradientTo: 'to-green-600',
-        baseColor: 'green',
-        icon: '汉 字 记',
-        title: 'Chinese Character Memory',
-        desc: 'Test your visual memory with Chinese characters—ideal for Mandarin learners.',
+      chinese: {
+        title: "Chinese Character Memory Challenge",
+        instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
+        generateSequence: level => {
+          // Using provided characters; slightly shorter sequence for Chinese
+          const characters = ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö'];
+          const sequence = [];
+          for (let i = 0; i < level + 1; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            sequence.push(characters[randomIndex]);
+          }
+          return sequence;
+        },
+        displayItem: item => item,
+        inputOptions: ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö']
       }
-    ];
+    };
 
-    const container = document.getElementById('game-grid');
-    const template = document.getElementById('game-card-template');
+    // Start a specific game
+    function startGame(gameType) {
+      currentGame = gameType;
+      currentLevel = 1;
+      currentScore = 0;
+      
+      // Update UI: hide games section and show game area
+      document.getElementById('games').classList.add('hidden');
+      document.getElementById('game-area').classList.remove('hidden');
+      
+      const config = gameConfigs[gameType];
+      document.getElementById('game-title').textContent = config.title;
+      document.getElementById('instructions-text').textContent = config.instructions;
+      document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
+      document.getElementById('score-display').textContent = `Score: ${currentScore}`;
+      
+      // Reset UI areas
+      document.getElementById('sequence-display').classList.add('hidden');
+      document.getElementById('user-input-area').classList.add('hidden');
+      document.getElementById('result-display').classList.add('hidden');
+      document.getElementById('game-start').classList.remove('hidden');
+      
+      // Scroll to game area
+      document.getElementById('game-area').scrollIntoView({ behavior: 'smooth' });
+    }
 
-    games.forEach(({ id, gradientFrom, gradientTo, baseColor, icon, title, desc }) => {
-      const clone = template.content.cloneNode(true);
-      const bgDiv = clone.querySelector('.h-48');
-      bgDiv.classList.add('bg-gradient-to-r', gradientFrom, gradientTo);
-      bgDiv.textContent = icon;
+    // Back to games list
+    function backToGames() {
+      document.getElementById('games').classList.remove('hidden');
+      document.getElementById('game-area').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-      clone.querySelector('h3').textContent = title;
-      clone.querySelector('p').textContent = desc;
-
-      const btn = clone.querySelector('button');
-      btn.classList.add(`bg-${baseColor}-600`, `hover:bg-${baseColor}-700`);
-      btn.addEventListener('click', () => startGame(id));
-
-      container.appendChild(clone);
+    // Start a new round when start button is clicked
+    document.getElementById('start-game-btn').addEventListener('click', () => {
+      startRound();
     });
 
-    // Placeholder for startGame
-    function startGame(gameId) {
-      // TODO: replace alert with actual game initialization
-      alert(`Starting ${gameId} game…`);
+    // Start a new round
+    function startRound() {
+      const config = gameConfigs[currentGame];
+      currentSequence = config.generateSequence(currentLevel);
+      userInput = [];
+      
+      // Display the sequence
+      const sequenceDisplay = document.getElementById('sequence-content');
+      sequenceDisplay.innerHTML = '';
+      currentSequence.forEach(item => {
+        const itemElement = document.createElement('span');
+        itemElement.textContent = config.displayItem(item);
+        itemElement.classList.add('mx-2', 'fade-in');
+        sequenceDisplay.appendChild(itemElement);
+      });
+      
+      // Toggle UI for sequence display then user input after delay
+      document.getElementById('game-start').classList.add('hidden');
+      document.getElementById('sequence-display').classList.remove('hidden');
+      
+      const displayDuration = currentSequence.length * 1500;
+      setTimeout(() => {
+        document.getElementById('sequence-display').classList.add('hidden');
+        setupUserInput();
+      }, displayDuration);
     }
+
+    // Setup user input area by rendering clickable buttons
+    function setupUserInput() {
+      // Initially clear input area then render options via updateInputDisplay
+      const inputTiles = document.getElementById('input-tiles');
+      inputTiles.innerHTML = '';
+      updateInputDisplay();
+      document.getElementById('user-input-area').classList.remove('hidden');
+    }
+
+    // Update user input display: show selected items, blank slots, and clickable options
+    function updateInputDisplay() {
+      const inputTiles = document.getElementById('input-tiles');
+      inputTiles.innerHTML = '';
+      const config = gameConfigs[currentGame];
+
+      // Render user selected inputs
+      userInput.forEach(item => {
+        const span = document.createElement('span');
+        span.textContent = config.displayItem(item);
+        span.className = 'bg-blue-100 border border-blue-300 rounded-lg p-4 text-xl font-medium flex items-center justify-center';
+        inputTiles.appendChild(span);
+      });
+
+      // Render empty slots for remaining inputs
+      const remainingSlots = currentSequence.length - userInput.length;
+      for (let i = 0; i < remainingSlots; i++) {
+        const div = document.createElement('div');
+        div.className = 'border-2 border-dashed border-gray-300 rounded-lg p-4 text-xl flex items-center justify-center';
+        inputTiles.appendChild(div);
+      }
+
+      // If the sequence is not complete, show all clickable option buttons
+      if (userInput.length < currentSequence.length) {
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'col-span-full flex flex-wrap justify-center mt-4 gap-2';
+        config.inputOptions.forEach(item => {
+          const button = document.createElement('button');
+          button.textContent = config.displayItem(item);
+          button.className = 'memory-tile bg-white hover:bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-lg font-medium transition';
+          button.onclick = () => {
+            userInput.push(item);
+            updateInputDisplay();
+          };
+          optionsDiv.appendChild(button);
+        });
+        inputTiles.appendChild(optionsDiv);
+      }
+    }
+
+    // Submit answer and check correctness
+    document.getElementById('submit-answer').addEventListener('click', checkAnswer);
+    document.getElementById('reset-input').addEventListener('click', () => {
+      userInput = [];
+      updateInputDisplay();
+    });
+
+    function checkAnswer() {
+      document.getElementById('user-input-area').classList.add('hidden');
+      const resultDisplay = document.getElementById('result-display');
+      resultDisplay.classList.remove('hidden');
+      
+      const config = gameConfigs[currentGame];
+      let isCorrect = (userInput.length === currentSequence.length) &&
+                      currentSequence.every((item, index) => userInput[index] === item);
+      
+      if (isCorrect) {
+        resultDisplay.className = 'mt-6 p-4 rounded-lg text-center bg-green-50 border border-green-200 fade-in';
+        document.getElementById('result-message').textContent = 'Correct!';
+        document.getElementById('result-message').className = 'text-2xl font-bold mb-2 text-green-600';
+        document.getElementById('result-details').textContent = `You remembered all ${currentSequence.length} items correctly!`;
+        currentScore += currentLevel * 10;
+        currentLevel++;
+      } else {
+        resultDisplay.className = 'mt-6 p-4 rounded-lg text-center bg-red-50 border border-red-200 fade-in';
+        document.getElementById('result-message').textContent = 'Try Again';
+        document.getElementById('result-message').className = 'text-2xl font-bold mb-2 text-red-600';
+        
+        const correctSequence = currentSequence.map(item => config.displayItem(item)).join(' ');
+        document.getElementById('result-details').textContent = `The correct sequence was: ${correctSequence}`;
+        
+        if (currentLevel > 1) {
+          currentLevel--; // Decrease level on error if possible
+        }
+      }
+      
+      // Update score and level in the UI
+      document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
+      document.getElementById('score-display').textContent = `Score: ${currentScore}`;
+    }
+
+    // Next round button
+    document.getElementById('next-round').addEventListener('click', startRound);
   </script>
 </body>
 </html>
+
 
 
 
