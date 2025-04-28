@@ -151,7 +151,7 @@
         </p>
       </div>
       <div id="game-grid" class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- JavaScript will populate cards here -->
+        <!-- Cards will be injected here -->
       </div>
       <template id="game-card-template">
         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
@@ -169,7 +169,7 @@
       </template>
     </section>
 
-    <!-- Placeholder for dynamic game area -->
+    <!-- Dynamic Game Area -->
     <section id="game-area" class="py-16 bg-gray-50 hidden" aria-live="polite"></section>
 
     <!-- Benefits Section -->
@@ -336,48 +336,60 @@
       document.querySelector('[data-mobile-menu]').classList.toggle('hidden');
     });
 
-    // Dynamically render game cards
+    // Dynamically render game cards with correct class splitting
     const games = [
       {
         id: 'number',
-        colors: 'from-blue-500 to-blue-600',
+        gradientFrom: 'from-blue-500',
+        gradientTo: 'to-blue-600',
+        baseColor: 'blue',
         icon: '1 2 3',
         title: 'Number Memory',
         desc: 'Test your ability to remember sequences of numbers. Start small and build up!',
       },
       {
         id: 'letter',
-        colors: 'from-purple-500 to-purple-600',
+        gradientFrom: 'from-purple-500',
+        gradientTo: 'to-purple-600',
+        baseColor: 'purple',
         icon: 'A B C',
         title: 'Letter Memory',
         desc: 'Challenge yourself with sequences of letters—great for language learners!',
       },
       {
         id: 'chinese',
-        colors: 'from-green-500 to-green-600',
+        gradientFrom: 'from-green-500',
+        gradientTo: 'to-green-600',
+        baseColor: 'green',
         icon: '汉 字 记',
         title: 'Chinese Character Memory',
         desc: 'Test your visual memory with Chinese characters—ideal for Mandarin learners.',
-      },
+      }
     ];
 
     const container = document.getElementById('game-grid');
     const template = document.getElementById('game-card-template');
-    games.forEach(({ id, colors, icon, title, desc }) => {
-      const tpl = template.content.cloneNode(true);
-      const cardBg = tpl.querySelector('div > .h-48');
-      cardBg.classList.add(`bg-gradient-to-r`, colors);
-      cardBg.textContent = icon;
-      tpl.querySelector('h3').textContent = title;
-      tpl.querySelector('p').textContent = desc;
-      tpl.querySelector('button').classList.add(`bg-${colors.split(' ')[0].slice(5)}-600`, `hover:bg-${colors.split(' ')[0].slice(5)}-700`);
-      tpl.querySelector('button').addEventListener('click', () => startGame(id));
-      container.appendChild(tpl);
+
+    games.forEach(({ id, gradientFrom, gradientTo, baseColor, icon, title, desc }) => {
+      const clone = template.content.cloneNode(true);
+      const bgDiv = clone.querySelector('.h-48');
+      bgDiv.classList.add('bg-gradient-to-r', gradientFrom, gradientTo);
+      bgDiv.textContent = icon;
+
+      clone.querySelector('h3').textContent = title;
+      clone.querySelector('p').textContent = desc;
+
+      const btn = clone.querySelector('button');
+      btn.classList.add(`bg-${baseColor}-600`, `hover:bg-${baseColor}-700`);
+      btn.addEventListener('click', () => startGame(id));
+
+      container.appendChild(clone);
     });
 
-    // Placeholder for startGame()
-    function startGame(id) {
-      alert(`Start the ${id} game!`);
+    // Placeholder for startGame
+    function startGame(gameId) {
+      // TODO: replace alert with actual game initialization
+      alert(`Starting ${gameId} game…`);
     }
   </script>
 </body>
