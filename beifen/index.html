@@ -6,7 +6,7 @@
     <title>Memory Master - Fun Brain Training Games</title>
     <meta name="description" content="Improve your memory with our fun brain training games. Challenge yourself with number, letter, and Chinese character memory games.">
     <meta name="keywords" content="memory game, brain training, number memory, letter memory, Chinese character memory, cognitive exercise">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/css/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -184,7 +184,7 @@
                 <!-- Chinese Character Memory Game -->
                 <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
                     <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-                        <span class="text-white text-6xl font-bold">şş ×Ö ĽÇ</span>
+                        <span class="text-white text-6xl font-bold">汉 字 记</span>
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-3 text-gray-800">Chinese Character Memory</h3>
@@ -426,6 +426,7 @@
         let currentScore = 0;
         let currentSequence = [];
         let userInput = [];
+        let sequenceTimeout = null;
         
         // Game configurations
         const gameConfigs = {
@@ -465,7 +466,7 @@
                 title: "Chinese Character Memory Challenge",
                 instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
                 generateSequence: function(level) {
-                    const characters = ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö'];
+                    const characters = ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字'];
                     const sequence = [];
                     for (let i = 0; i < level + 1; i++) { // Slightly shorter sequences for Chinese
                         const randomIndex = Math.floor(Math.random() * characters.length);
@@ -476,15 +477,23 @@
                 displayItem: function(item) {
                     return item;
                 },
-                inputOptions: ['°®', 'şĂ', 'Ń§', 'Éú', 'ČŐ', 'ÔÂ', 'Ë®', '»đ', 'Äľ', '˝đ', 'ÍÁ', 'ČË', 'żÚ', 'ĘÖ', '´ó', 'Đˇ', 'ÖĐ', 'ąú', 'ÎÄ', '×Ö']
+                inputOptions: ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字']
             }
         };
 
         // Start a specific game
         function startGame(gameType) {
+            // Clear any existing timeouts
+            if (sequenceTimeout) {
+                clearTimeout(sequenceTimeout);
+                sequenceTimeout = null;
+            }
+            
             currentGame = gameType;
             currentLevel = 1;
             currentScore = 0;
+            currentSequence = [];
+            userInput = [];
             
             // Update UI
             document.getElementById('games').classList.add('hidden');
@@ -496,7 +505,7 @@
             document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
             document.getElementById('score-display').textContent = `Score: ${currentScore}`;
             
-            // Show start button
+            // Reset game UI elements
             document.getElementById('sequence-display').classList.add('hidden');
             document.getElementById('user-input-area').classList.add('hidden');
             document.getElementById('result-display').classList.add('hidden');
@@ -508,6 +517,12 @@
 
         // Back to games list
         function backToGames() {
+            // Clear any existing timeouts
+            if (sequenceTimeout) {
+                clearTimeout(sequenceTimeout);
+                sequenceTimeout = null;
+            }
+            
             document.getElementById('games').classList.remove('hidden');
             document.getElementById('game-area').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -538,9 +553,11 @@
             // Show sequence and hide other elements
             document.getElementById('game-start').classList.add('hidden');
             document.getElementById('sequence-display').classList.remove('hidden');
+            document.getElementById('user-input-area').classList.add('hidden');
+            document.getElementById('result-display').classList.add('hidden');
             
-            // After 2 seconds per item, hide sequence and show input
-            setTimeout(() => {
+            // After 1.5 seconds per item, hide sequence and show input
+            sequenceTimeout = setTimeout(() => {
                 document.getElementById('sequence-display').classList.add('hidden');
                 setupUserInput();
             }, currentSequence.length * 1500);
@@ -553,60 +570,87 @@
             
             const config = gameConfigs[currentGame];
             
-            // Create input buttons
-            config.inputOptions.forEach(item => {
-                const button = document.createElement('button');
-                button.textContent = config.displayItem(item);
-                button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'transition');
-                button.addEventListener('click', () => {
-                    userInput.push(item);
-                    updateInputDisplay();
-                });
-                inputTiles.appendChild(button);
-            });
-            
-            document.getElementById('user-input-area').classList.remove('hidden');
-        }
-
-        // 修复BUG后的updateInputDisplay
-        function updateInputDisplay() {
-            const inputTiles = document.getElementById('input-tiles');
-            const config = gameConfigs[currentGame];
-
-            // 清空输入区
-            inputTiles.innerHTML = '';
-
-            // 1. 显示用户已输入的内容
+            // First show the user's current input (empty at first)
             userInput.forEach(item => {
                 const span = document.createElement('span');
                 span.textContent = config.displayItem(item);
                 span.classList.add('bg-blue-100', 'border', 'border-blue-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'flex', 'items-center', 'justify-center');
                 inputTiles.appendChild(span);
             });
-
-            // 2. 显示剩余空格
+            
+            // Then add the input buttons for remaining slots
             const remainingSlots = currentSequence.length - userInput.length;
-            for (let i = 0; i < remainingSlots; i++) {
-                const div = document.createElement('div');
-                div.classList.add('border-2', 'border-dashed', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'flex', 'items-center', 'justify-center');
-                inputTiles.appendChild(div);
-            }
-
-            // 3. 只在还没输入满时，显示可点击按钮
-            if (userInput.length < currentSequence.length) {
-                const optionsDiv = document.createElement('div');
-                optionsDiv.classList.add('col-span-full', 'flex', 'flex-wrap', 'justify-center', 'mt-4', 'gap-2');
+            if (remainingSlots > 0) {
                 config.inputOptions.forEach(item => {
                     const button = document.createElement('button');
                     button.textContent = config.displayItem(item);
-                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'px-4', 'py-2', 'text-lg', 'font-medium', 'transition');
+                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'transition');
                     button.addEventListener('click', () => {
-                        userInput.push(item);
-                        updateInputDisplay();
+                        if (userInput.length < currentSequence.length) {
+                            userInput.push(item);
+                            updateInputDisplay();
+                        }
                     });
-                    optionsDiv.appendChild(button);
+                    inputTiles.appendChild(button);
                 });
-                inputTiles.appendChild(optionsDiv);
+            }
+            
+            // Enable/disable submit button based on input length
+            const submitBtn = document.getElementById('submit-answer');
+            if (userInput.length === currentSequence.length) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // Show the input area
+            document.getElementById('user-input-area').classList.remove('hidden');
+        }
+
+        // Update the display of user input
+        function updateInputDisplay() {
+            const inputTiles = document.getElementById('input-tiles');
+            const config = gameConfigs[currentGame];
+            
+            // Clear existing input display
+            inputTiles.innerHTML = '';
+            
+            // Show user's current input
+            userInput.forEach(item => {
+                const span = document.createElement('span');
+                span.textContent = config.displayItem(item);
+                span.classList.add('bg-blue-100', 'border', 'border-blue-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'flex', 'items-center', 'justify-center');
+                inputTiles.appendChild(span);
+            });
+            
+            // Add remaining input buttons
+            const remainingSlots = currentSequence.length - userInput.length;
+            if (remainingSlots > 0) {
+                // Add the input buttons for remaining slots
+                config.inputOptions.forEach(item => {
+                    const button = document.createElement('button');
+                    button.textContent = config.displayItem(item);
+                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'transition');
+                    button.addEventListener('click', () => {
+                        if (userInput.length < currentSequence.length) {
+                            userInput.push(item);
+                            updateInputDisplay();
+                        }
+                    });
+                    inputTiles.appendChild(button);
+                });
+            }
+            
+            // Enable/disable submit button based on input length
+            const submitBtn = document.getElementById('submit-answer');
+            if (userInput.length === currentSequence.length) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
@@ -672,3 +716,4 @@
     </script>
 </body>
 </html>
+
