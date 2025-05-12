@@ -254,7 +254,8 @@
                 <h2 id="game-title" class="text-2xl md:text-3xl font-bold text-gray-800"></h2>
                 <div class="flex items-center space-x-4">
                     <span id="level-display" class="bg-gray-200 px-4 py-2 rounded-lg font-medium">Level: 1</span>
-                    <span id="score-display" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">Score: 0</span>
+                    <span id="score-display" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">Score:
+                        0</span>
                 </div>
             </div>
 
@@ -471,13 +472,16 @@
                 <div>
                     <h3 class="text-lg font-bold mb-4">Connect</h3>
                     <div class="flex space-x-4 mb-4">
-                        <a href="#" class="bg-gray-700 hover:bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center transition">
+                        <a href="#"
+                            class="bg-gray-700 hover:bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="bg-gray-700 hover:bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center transition">
+                        <a href="#"
+                            class="bg-gray-700 hover:bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="#" class="bg-gray-700 hover:bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center transition">
+                        <a href="#"
+                            class="bg-gray-700 hover:bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-instagram"></i>
                         </a>
                     </div>
@@ -493,7 +497,7 @@
     <!-- Game Logic Script -->
     <script>
         // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu-button').addEventListener('click', function () {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         });
@@ -505,20 +509,20 @@
         let currentSequence = [];
         let userInput = [];
         let sequenceTimeout = null;
-        
+
         // Game configurations
         const gameConfigs = {
             number: {
                 title: "Number Memory Challenge",
                 instructions: "Memorize the sequence of numbers shown, then repeat it correctly. The sequence gets longer with each level.",
-                generateSequence: function(level) {
+                generateSequence: function (level) {
                     const sequence = [];
                     for (let i = 0; i < level + 2; i++) {
                         sequence.push(Math.floor(Math.random() * 10)); // Random digit 0-9
                     }
                     return sequence;
                 },
-                displayItem: function(item) {
+                displayItem: function (item) {
                     return item.toString();
                 },
                 inputOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -526,7 +530,7 @@
             letter: {
                 title: "Letter Memory Challenge",
                 instructions: "Memorize the sequence of letters shown, then repeat it correctly. Watch out for similar-looking letters!",
-                generateSequence: function(level) {
+                generateSequence: function (level) {
                     const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding I, O for clarity
                     const sequence = [];
                     for (let i = 0; i < level + 2; i++) {
@@ -535,7 +539,7 @@
                     }
                     return sequence;
                 },
-                displayItem: function(item) {
+                displayItem: function (item) {
                     return item;
                 },
                 inputOptions: 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('')
@@ -543,7 +547,7 @@
             chinese: {
                 title: "Chinese Character Memory Challenge",
                 instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
-                generateSequence: function(level) {
+                generateSequence: function (level) {
                     const characters = ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字'];
                     const sequence = [];
                     for (let i = 0; i < level + 1; i++) { // Slightly shorter sequences for Chinese
@@ -552,7 +556,7 @@
                     }
                     return sequence;
                 },
-                displayItem: function(item) {
+                displayItem: function (item) {
                     return item;
                 },
                 inputOptions: ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字']
@@ -566,29 +570,29 @@
                 clearTimeout(sequenceTimeout);
                 sequenceTimeout = null;
             }
-            
+
             currentGame = gameType;
             currentLevel = 1;
             currentScore = 0;
             currentSequence = [];
             userInput = [];
-            
+
             // Update UI
             document.getElementById('games').classList.add('hidden');
             document.getElementById('game-area').classList.remove('hidden');
-            
+
             const config = gameConfigs[gameType];
             document.getElementById('game-title').textContent = config.title;
             document.getElementById('instructions-text').textContent = config.instructions;
             document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
             document.getElementById('score-display').textContent = `Score: ${currentScore}`;
-            
+
             // Reset game UI elements
             document.getElementById('sequence-display').classList.add('hidden');
             document.getElementById('user-input-area').classList.add('hidden');
             document.getElementById('result-display').classList.add('hidden');
             document.getElementById('game-start').classList.remove('hidden');
-            
+
             // Scroll to game area
             document.getElementById('game-area').scrollIntoView({ behavior: 'smooth' });
         }
@@ -600,14 +604,14 @@
                 clearTimeout(sequenceTimeout);
                 sequenceTimeout = null;
             }
-            
+
             document.getElementById('games').classList.remove('hidden');
             document.getElementById('game-area').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Initialize the game when start button is clicked
-        document.getElementById('start-game-btn').addEventListener('click', function() {
+        document.getElementById('start-game-btn').addEventListener('click', function () {
             startRound();
         });
 
@@ -616,17 +620,18 @@
             const config = gameConfigs[currentGame];
             currentSequence = config.generateSequence(currentLevel);
             userInput = [];
-            
+
             // Display sequence
             const sequenceDisplay = document.getElementById('sequence-content');
             sequenceDisplay.innerHTML = '';
-            
+
             currentSequence.forEach((item, index) => {
                 const itemElement = document.createElement('span');
                 itemElement.textContent = config.displayItem(item);
                 itemElement.classList.add('mx-2', 'fade-in');
                 sequenceDisplay.appendChild(itemElement);
             });
-            
+
             // Show sequence and hide other elements
-            document.getElementById('game-start').classList.add('hidden
+            document.getElementById('game-start').classList.add('hidden');
+            document.getElementById('sequence-display').classList.remove('hidden');
