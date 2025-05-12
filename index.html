@@ -272,84 +272,111 @@
             }
         };
 
-        // Start a specific game
+        
+ // Start a specific game
         function startGame(gameType) {
-            if (sequenceTimeout) { clearTimeout(sequenceTimeout); sequenceTimeout = null; }
+            // Clear any existing timeouts
+            if (sequenceTimeout) {
+                clearTimeout(sequenceTimeout);
+                sequenceTimeout = null;
+            }
+            
             currentGame = gameType;
             currentLevel = 1;
             currentScore = 0;
             currentSequence = [];
             userInput = [];
-
+            
+            // Update UI
             document.getElementById('games').classList.add('hidden');
             document.getElementById('game-area').classList.remove('hidden');
-
+            
             const config = gameConfigs[gameType];
             document.getElementById('game-title').textContent = config.title;
             document.getElementById('instructions-text').textContent = config.instructions;
             document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
             document.getElementById('score-display').textContent = `Score: ${currentScore}`;
+            
+            // Reset game UI elements
             document.getElementById('sequence-display').classList.add('hidden');
             document.getElementById('user-input-area').classList.add('hidden');
             document.getElementById('result-display').classList.add('hidden');
             document.getElementById('game-start').classList.remove('hidden');
+            
+            // Scroll to game area
             document.getElementById('game-area').scrollIntoView({ behavior: 'smooth' });
-
-            // 让Play Game按钮直接开始第一关
-            startRound();
         }
 
+        // Back to games list
         function backToGames() {
-            if (sequenceTimeout) { clearTimeout(sequenceTimeout); sequenceTimeout = null; }
+            // Clear any existing timeouts
+            if (sequenceTimeout) {
+                clearTimeout(sequenceTimeout);
+                sequenceTimeout = null;
+            }
+            
             document.getElementById('games').classList.remove('hidden');
             document.getElementById('game-area').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Initialize the game when start button is clicked
         document.getElementById('start-game-btn').addEventListener('click', function() {
             startRound();
         });
 
+        // Start a new round
         function startRound() {
             const config = gameConfigs[currentGame];
             currentSequence = config.generateSequence(currentLevel);
             userInput = [];
-
+            
+            // Display sequence
             const sequenceDisplay = document.getElementById('sequence-content');
             sequenceDisplay.innerHTML = '';
-            currentSequence.forEach(item => {
+            
+            currentSequence.forEach((item, index) => {
                 const itemElement = document.createElement('span');
                 itemElement.textContent = config.displayItem(item);
                 itemElement.classList.add('mx-2', 'fade-in');
                 sequenceDisplay.appendChild(itemElement);
             });
-
+            
+            // Show sequence and hide other elements
             document.getElementById('game-start').classList.add('hidden');
             document.getElementById('sequence-display').classList.remove('hidden');
             document.getElementById('user-input-area').classList.add('hidden');
             document.getElementById('result-display').classList.add('hidden');
+            
+            // After 1.5 seconds per item, hide sequence and show input
             sequenceTimeout = setTimeout(() => {
                 document.getElementById('sequence-display').classList.add('hidden');
                 setupUserInput();
             }, currentSequence.length * 1500);
         }
 
+        // Setup user input area
         function setupUserInput() {
             const inputTiles = document.getElementById('input-tiles');
             inputTiles.innerHTML = '';
+            
             const config = gameConfigs[currentGame];
+            
+            // First show the user's current input (empty at first)
             userInput.forEach(item => {
                 const span = document.createElement('span');
                 span.textContent = config.displayItem(item);
-                span.classList.add('bg-blue-100','border','border-blue-300','rounded-lg','p-4','text-xl','font-medium','flex','items-center','justify-center');
+                span.classList.add('bg-blue-100', 'border', 'border-blue-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'flex', 'items-center', 'justify-center');
                 inputTiles.appendChild(span);
             });
+            
+            // Then add the input buttons for remaining slots
             const remainingSlots = currentSequence.length - userInput.length;
             if (remainingSlots > 0) {
                 config.inputOptions.forEach(item => {
                     const button = document.createElement('button');
                     button.textContent = config.displayItem(item);
-                    button.classList.add('memory-tile','bg-white','hover:bg-gray-100','border','border-gray-300','rounded-lg','p-4','text-xl','font-medium','transition');
+                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'transition');
                     button.addEventListener('click', () => {
                         if (userInput.length < currentSequence.length) {
                             userInput.push(item);
@@ -359,33 +386,45 @@
                     inputTiles.appendChild(button);
                 });
             }
+            
+            // Enable/disable submit button based on input length
             const submitBtn = document.getElementById('submit-answer');
             if (userInput.length === currentSequence.length) {
                 submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-50','cursor-not-allowed');
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             } else {
                 submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-50','cursor-not-allowed');
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
             }
+            
+            // Show the input area
             document.getElementById('user-input-area').classList.remove('hidden');
         }
 
+        // Update the display of user input
         function updateInputDisplay() {
             const inputTiles = document.getElementById('input-tiles');
             const config = gameConfigs[currentGame];
+            
+            // Clear existing input display
             inputTiles.innerHTML = '';
+            
+            // Show user's current input
             userInput.forEach(item => {
                 const span = document.createElement('span');
                 span.textContent = config.displayItem(item);
-                span.classList.add('bg-blue-100','border','border-blue-300','rounded-lg','p-4','text-xl','font-medium','flex','items-center','justify-center');
+                span.classList.add('bg-blue-100', 'border', 'border-blue-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'flex', 'items-center', 'justify-center');
                 inputTiles.appendChild(span);
             });
+            
+            // Add remaining input buttons
             const remainingSlots = currentSequence.length - userInput.length;
             if (remainingSlots > 0) {
+                // Add the input buttons for remaining slots
                 config.inputOptions.forEach(item => {
                     const button = document.createElement('button');
                     button.textContent = config.displayItem(item);
-                    button.classList.add('memory-tile','bg-white','hover:bg-gray-100','border','border-gray-300','rounded-lg','p-4','text-xl','font-medium','transition');
+                    button.classList.add('memory-tile', 'bg-white', 'hover:bg-gray-100', 'border', 'border-gray-300', 'rounded-lg', 'p-4', 'text-xl', 'font-medium', 'transition');
                     button.addEventListener('click', () => {
                         if (userInput.length < currentSequence.length) {
                             userInput.push(item);
@@ -395,28 +434,34 @@
                     inputTiles.appendChild(button);
                 });
             }
+            
+            // Enable/disable submit button based on input length
             const submitBtn = document.getElementById('submit-answer');
             if (userInput.length === currentSequence.length) {
                 submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-50','cursor-not-allowed');
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             } else {
                 submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-50','cursor-not-allowed');
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
+        // Submit answer
         document.getElementById('submit-answer').addEventListener('click', checkAnswer);
         document.getElementById('reset-input').addEventListener('click', function() {
             userInput = [];
             updateInputDisplay();
         });
 
+        // Check if user's answer is correct
         function checkAnswer() {
             document.getElementById('user-input-area').classList.add('hidden');
             const resultDisplay = document.getElementById('result-display');
             resultDisplay.classList.remove('hidden');
+            
             const config = gameConfigs[currentGame];
             let isCorrect = true;
+            
             if (userInput.length !== currentSequence.length) {
                 isCorrect = false;
             } else {
@@ -427,6 +472,7 @@
                     }
                 }
             }
+            
             if (isCorrect) {
                 resultDisplay.className = 'mt-6 p-4 rounded-lg text-center bg-green-50 border border-green-200 fade-in';
                 document.getElementById('result-message').textContent = 'Correct!';
@@ -438,19 +484,26 @@
                 resultDisplay.className = 'mt-6 p-4 rounded-lg text-center bg-red-50 border border-red-200 fade-in';
                 document.getElementById('result-message').textContent = 'Try Again';
                 document.getElementById('result-message').className = 'text-2xl font-bold mb-2 text-red-600';
+                
                 let correctSequence = '';
                 currentSequence.forEach(item => {
                     correctSequence += config.displayItem(item) + ' ';
                 });
+                
                 document.getElementById('result-details').textContent = `The correct sequence was: ${correctSequence}`;
+                
+                // Don't increase level if wrong
                 if (currentLevel > 1) {
-                    currentLevel--;
+                    currentLevel--; // Go back one level if wrong
                 }
             }
+            
+            // Update score and level displays
             document.getElementById('level-display').textContent = `Level: ${currentLevel}`;
             document.getElementById('score-display').textContent = `Score: ${currentScore}`;
         }
 
+        // Next round button
         document.getElementById('next-round').addEventListener('click', startRound);
     </script>
 </body>
