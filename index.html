@@ -370,64 +370,81 @@
     </footer>
 
     <!-- Game Logic Script -->
-   <script>
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
 
-        let currentGame = null;
-        let currentLevel = 1;
-        let currentScore = 0;
-        let currentSequence = [];
-        let userInput = [];
-        let sequenceTimeout = null;
-
-        const gameConfigs = {
-            number: {
-                title: "Number Memory Challenge",
-                instructions: "Memorize the sequence of numbers shown, then repeat it correctly. The sequence gets longer with each level.",
-                generateSequence: function(level) {
-                    const sequence = [];
-                    for (let i = 0; i < level + 2; i++) {
-                        sequence.push(Math.floor(Math.random() * 10));
-                    }
-                    return sequence;
-                },
-                displayItem: function(item) { return item.toString(); },
-                inputOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    // Current game state
+    let currentGame = null;
+    let currentLevel = 1;
+    let currentScore = 0;
+    let currentSequence = [];
+    let userInput = [];
+    let sequenceTimeout = null;
+    
+    // Game configurations
+    const gameConfigs = {
+        number: {
+            title: "Number Memory Challenge",
+            instructions: "Memorize the sequence of numbers shown, then repeat it correctly. The sequence gets longer with each level.",
+            generateSequence: function(level) {
+                const sequence = [];
+                for (let i = 0; i < level + 2; i++) {
+                    sequence.push(Math.floor(Math.random() * 10)); // Random digit 0-9
+                }
+                return sequence;
             },
-            letter: {
-                title: "Letter Memory Challenge",
-                instructions: "Memorize the sequence of letters shown, then repeat it correctly. Watch out for similar-looking letters!",
-                generateSequence: function(level) {
-                    const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-                    const sequence = [];
-                    for (let i = 0; i < level + 2; i++) {
-                        const randomIndex = Math.floor(Math.random() * letters.length);
-                        sequence.push(letters[randomIndex]);
-                    }
-                    return sequence;
-                },
-                displayItem: function(item) { return item; },
-                inputOptions: 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('')
+            displayItem: function(item) {
+                return item.toString();
             },
-            chinese: {
-                title: "Chinese Character Memory Challenge",
-                instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
-                generateSequence: function(level) {
-                    const characters = ['爱', '好', '学', '生', '日', '月', '水', '火', '木', '金', '土', '人', '口', '手', '大', '小', '中', '国', '文', '字'];
-                    const sequence = [];
-                    for (let i = 0; i < level + 1; i++) {
-                        const randomIndex = Math.floor(Math.random() * characters.length);
-                        sequence.push(characters[randomIndex]);
-                    }
-                    return sequence;
-                },
-                displayItem: function(item) { return item; },
-                inputOptions: ['爱','好','学','生','日','月','水','火','木','金','土','人','口','手','大','小','中','国','文','字']
-            }
-        };
+            inputOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        },
+        letter: {
+            title: "Letter Memory Challenge",
+            instructions: "Memorize the sequence of letters shown, then repeat it correctly. Watch out for similar-looking letters!",
+            generateSequence: function(level) {
+                const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // Excluding I, O for clarity
+                const sequence = [];
+                for (let i = 0; i < level + 2; i++) {
+                    const randomIndex = Math.floor(Math.random() * letters.length);
+                    sequence.push(letters[randomIndex]);
+                }
+                return sequence;
+            },
+            displayItem: function(item) {
+                return item;
+            },
+            inputOptions: 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('')
+        },
+        chinese: {
+            title: "Chinese Character Memory Challenge",
+            instructions: "Memorize the sequence of Chinese characters shown, then repeat it correctly. This tests your visual memory.",
+            generateSequence: function(level) {
+                const characters = [
+                    '爱','好','学','生','日','月','水','火','木','金','土','人','口','手','大','小','中','国','文','字',
+                    '天','地','上','下','左','右','心','明','力','气','神','山','海','河','湖','风','雨','雪','云','花',
+                    '草','竹','林','树','鱼','鸟','虫','马','牛','羊','狗','猫','龙','凤','虎','兔','猪','鸡','猴','鼠'
+                ];
+                const sequence = [];
+                for (let i = 0; i < level + 1; i++) { // Slightly shorter sequences for Chinese
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    sequence.push(characters[randomIndex]);
+                }
+                return sequence;
+            },
+            displayItem: function(item) {
+                return item;
+            },
+            inputOptions: [
+                '爱','好','学','生','日','月','水','火','木','金','土','人','口','手','大','小','中','国','文','字',
+                '天','地','上','下','左','右','心','明','力','气','神','山','海','河','湖','风','雨','雪','云','花',
+                '草','竹','林','树','鱼','鸟','虫','马','牛','羊','狗','猫','龙','凤','虎','兔','猪','鸡','猴','鼠'
+            ]
+        }
+    };
 
         // Start a specific game
         function startGame(gameType, autoStart) {
